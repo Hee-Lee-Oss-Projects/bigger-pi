@@ -1,0 +1,34 @@
+{
+  "id": "bigger-pi-arch-001",
+  "title": "ADRs: dual bignum-backend strategy, (P,Q,T) artifact format, coordination+ledger schema, guard-digit policy, determinism contract",
+  "project": "bigger-pi",
+  "type": "design-spec",
+  "lane": "donated",
+  "priority": "high",
+  "domain": ["mathematics", "distributed-computing", "software", "open-data"],
+  "riskTier": "low",
+  "urgent": false,
+  "deliverable": "document",
+  "tokenEstimate": "small",
+  "status": "open",
+  "context": "bigger-pi is an open, distributed, verification-first effort to compute more digits of pi on donated compute, where the public good is the open, reproducible, independently-verified toolchain + chunk-coordination protocol + provenance ledger. The HARD RULE - no digit accepted or published without independent verification (dual computation bit-match + BBP/Bellard spot-check + per-chunk recompute) - is the project's spine. This task records the foundational architecture decisions that everything else depends on. Verification independence requires two genuinely independent bignum backends, and the verification harness's bit-identical contract depends on both the backend choice and the guard-digit policy, so these ADRs must land before the harness is finalized.",
+  "objective": "Record ADRs for: (1) a dual, independent bignum-backend strategy (a vetted open library plus a clean-room NTT/FFT path) and the FFI/WASM boundary; (2) the (P,Q,T) artifact serialization + hashing format; (3) the coordination protocol + append-only hash-chained ledger + reproducibility-manifest schema; (4) the guard-digit / rounding policy for the single-host final assembly; (5) the determinism contract defining what bit-identical means across backends and platforms.",
+  "acceptanceCriteria": [
+    "ADR selects two genuinely independent bignum backends with verification independence as the deciding criterion, and documents the LGPL-linking stance for any library used",
+    "Artifact format ADR defines (P,Q,T) serialization plus SHA-256 and a second independent hash for content addressing",
+    "Coordination + ledger ADR defines WorkUnit, ChunkResult, VerificationRecord, LedgerEntry, ReleaseManifest with an append-only hash-chained, signed ledger and no secrets anywhere in the schema",
+    "Guard-digit policy specifies how G is chosen and how published precision excludes unstable trailing digits",
+    "Determinism contract states that exact-integer (P,Q,T) results are always identical and that final-assembly rounding is pinned by the guard-digit policy",
+    "ADRs are reviewed by maintainer, algo reviewer, and the verification steward before M0 implementation tasks proceed"
+  ],
+  "resources": [
+    "C:\\code\\elyos\\planning\\projects\\bigger-pi\\PLAN.md",
+    "C:\\code\\elyos\\planning\\ROADMAP.md",
+    "C:\\code\\elyos\\CLAUDE.md",
+    "C:\\code\\elyos\\docs\\good-deed-definition.md"
+  ],
+  "output": "A document recording ADRs #1-#5 (dual bignum-backend strategy, (P,Q,T) artifact format, coordination+ledger schema, guard-digit policy, determinism contract) that gate the M0 implementation and verification tasks.",
+  "requestor": "TBD",
+  "verifiedNeed": false,
+  "outputLicense": "CC-BY-4.0"
+}
