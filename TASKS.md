@@ -1,6 +1,6 @@
 # TASKS — bigger-pi (distributed, verified, open computation of more digits of π)
 
-> Status: Draft · Version: 0.1.0 · Last updated: 2026-06-28 · Owner: TBD (maintainer) · Lane: donated
+> Status: Draft · Version: 0.2.0 · Last updated: 2026-06-29 · Owner: TBD (maintainer) · Lane: donated
 
 ## How these tasks map to Elyos
 
@@ -36,10 +36,13 @@ reviewer), `verify-steward` (owns the HARD RULE gate; **independent of whoever r
 `steward` (last-mile dataset/partner owner).
 
 **HARD RULE (binding on all computation-run + release tasks):** no digit result is accepted into the
-ledger or published unless **(1)** two independent full computations are **bit-identical** (different
-backend/impl, ideally different operator), **(2)** independent-path **BBP/Bellard hex spot-checks**
-pass, **(3)** every constituent chunk was recompute-verified + hashed, **(4)** the published prefix
-matches a known reference, and **(5)** the guard-digit analysis is recorded. The author of a run may
+ledger or published unless the **standard gate** passes: **(1)** one main Chudnovsky computation,
+**(2)** independent-path **BBP/Bellard hex spot-checks** pass (≥ 64 random offsets + hex tail — note
+these are *base-16, position-specific* checks, not a base-10 re-derivation), **(3)** every constituent
+chunk was recompute-verified + hashed, **(4)** the published prefix matches a known reference, and
+**(5)** the guard-digit analysis is recorded. **Dual *full* independent computation is reserved** for
+small reference baselines or where BBP coverage is insufficient — it is *not* the default, because two
+full computations per result double CPU-hours/energy (no-waste guardrail). The author of a run may
 **not** verify their own run; `verify-steward` signs the `VerificationRecord`.
 
 **Sequencing rule (M0):** the **bignum-backend ADR and guard-digit policy (arch-001) are decided
@@ -71,10 +74,13 @@ schema (ledger-005).
   - Deterministic: identical input → identical artifact hash on repeat runs.
   - TypeScript/ESM, builds via pnpm; `pnpm build && pnpm test && pnpm lint` pass; MIT-licensed.
 - **bigger-pi-verify-004 (verification harness — HARD RULE):**
-  - Re-derives a result with a **second independent bignum backend** and asserts **bit-identical**
-    (excluding the declared `G` guard digits); fails loudly on any mismatch.
-  - Runs ≥ 64 random BBP/Bellard **hex spot-checks** + the hex tail against the assembled binary; all
-    must pass; the residual-error probability bound is documented.
+  - **Standard gate:** runs ≥ 64 random BBP/Bellard **hex spot-checks** + the hex tail (an *independent
+    formula*, base-16) against the assembled value; all must pass; the residual-error probability bound
+    is documented. This is the default — a single main computation, not two.
+  - **Reserved dual-full check:** for small reference baselines (or where BBP coverage is insufficient),
+    re-derives the result with a **second independent bignum backend** and asserts **bit-identical**
+    (excluding the declared `G` guard digits), failing loudly on mismatch — invoked deliberately, not by
+    default (it doubles energy).
   - Cross-checks the published prefix against a known reference value.
   - Emits a `VerificationRecord` (hashes, backends, spot-check results, guard digits, verifier id);
     refuses to mark "verified" unless **every** limb passes.
@@ -87,8 +93,9 @@ schema (ledger-005).
     command, and compute/energy fields; no secrets appear anywhere in the schema.
   - Includes a documented one-command reproduction path from ledger → final hash.
 - **bigger-pi-ci-006 (CI gates):**
-  - CI fails on build/type/lint/unit errors, on any **determinism** failure (two backends produce
-    different hashes), on any **verification-gate** test failure, on a **license-incompatible
+  - CI fails on build/type/lint/unit errors, on any **determinism** failure (the reference path —
+    **integer / fixed-modulus NTT, not floating FFT** — must produce identical hashes across backends/
+    architectures), on any **verification-gate** test failure, on a **license-incompatible
     dependency**, and on any **secret** detected in code/artifacts/ledger fixtures.
 
 **Definition of Done (M0):** π computed to ≥ 1e6 digits by Method A on a single host, **independently
@@ -142,14 +149,22 @@ final-assembly bottleneck benchmarked and documented.
 **Acceptance criteria — key tasks**
 
 - **bigger-pi-coord-011 (coordinator service):**
-  - Assigns work units (no duplicate assignment beyond the required verification copy), collects
-    results + checksums, dispatches the 2nd-worker recompute, and records assign→result→verify→merge
-    in the **public, append-only, hash-chained** ledger.
+  - A documented **build-vs-reuse decision** (custom coordinator vs. running as a **BOINC project**) is
+    recorded before implementation; BOINC already provides work distribution, redundant validation, and
+    credit.
+  - Assigns work units with a **tunable redundancy factor** (e.g., 2× quorum + tie-break recompute,
+    reputation-weighted; no duplicate assignment beyond that), keeps upper merge levels on the
+    coordinator/assembly host (bandwidth reality), collects results + checksums, dispatches the
+    recompute, and records assign→result→verify→merge in the **public, append-only, hash-chained**
+    ledger.
   - The coordinator **never executes donor-supplied code**; it only dispatches our defined work units.
   - The published ledger is reproducible: an independent party can re-derive the run's final hash.
 - **bigger-pi-worker-012 (worker client):**
   - A **signed, open** client the donor installs and runs **on their own machine with explicit,
     informed consent** and an obvious stop/kill control; honors per-chunk CPU/memory caps.
+  - **GIMPS-style checkpoint/restart** (periodic state save) so an interrupted laptop-class session
+    resumes without losing work; **client-side self-checking arithmetic** (e.g., mod-p residue check)
+    catches most bad results before they consume verification budget.
   - Submits result + checksum + technical env metadata only; **pseudonymous, opt-in** attribution; no
     PII, no behavioral telemetry; no secrets written to logs/artifacts.
 - **bigger-pi-abuse-013 (anti-abuse threat model):**
@@ -182,7 +197,7 @@ hash-chained, and independently reproducible; the anti-abuse threat model is imp
   - A computational-mathematics / numerical-analysis SME reviews and signs off the guard-digit
     derivation, the BBP spot-check count vs. its stated probability bound, and the genuineness of
     backend/two-method independence; sign-off recorded.
-  - This sign-off is a **prerequisite for any record-scale publication (M4).**
+  - This sign-off is a **prerequisite for any large-scale publication (M4).**
 
 **Definition of Done (M3):** documented ≥ X× throughput on a fixed benchmark; ≥ 2 genuinely
 independent bignum backends maintained; every perf change passes determinism + verification gates;
@@ -190,7 +205,7 @@ SME methodology sign-off recorded.
 
 ---
 
-## Milestone M4 — Verified record-scale run + open dataset release
+## Milestone M4 — Verified moderate-scale run + open dataset release
 
 | ID | Title | Type | Size | Risk | Deliverable | Depends on | Reviewer |
 | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -199,11 +214,13 @@ SME methodology sign-off recorded.
 
 **Acceptance criteria — key tasks**
 
-- **bigger-pi-run-017 (verified record-scale run):**
-  - The run's digit target and total compute/energy budget were **approved in advance** against the
-    energy-cost disclosure (no open-ended chase).
-  - The result passes the **full HARD RULE** (two-method bit-identical agreement + BBP spot-checks +
-    every chunk recompute-verified + reference prefix match + guard-digit analysis), signed by the
+- **bigger-pi-run-017 (verified moderate-scale run, within the ~1e8–1e10 ceiling):**
+  - The run's digit target (within the distributed ceiling, never record-adjacent) and total
+    compute/energy budget were **approved in advance** against the energy-cost disclosure, justified by
+    education/verification outcomes (no open-ended chase).
+  - The result passes the **full HARD RULE** (one main computation + independent-formula BBP spot-checks
+    + every chunk recompute-verified + reference prefix match + guard-digit analysis; dual-full reserved
+    for baselines), signed by the
     `verify-steward` (not the runner).
   - **Zero unverified digits are published.**
 - **bigger-pi-release-018 (open dataset release):**
@@ -246,13 +263,17 @@ status; absence does not strand the already-shipped public good).
 
 | ID | Title | Type | Size | Risk | Deliverable | Notes |
 | --- | --- | --- | --- | --- | --- | --- |
-| bigger-pi-feat-021 | Frontier final-assembly: large-memory / out-of-core consolidation strategy | research | large | medium | document | Addresses the single-host bottleneck for record scale |
+| bigger-pi-feat-021 | Frontier final-assembly: large-memory / out-of-core consolidation strategy | research | large | medium | document | Out-of-scope frontier beyond the ~1e8–1e10 ceiling; documents the single-host bottleneck |
 | bigger-pi-feat-022 | Normality / digit-statistics dataset + analysis notebooks (CC0) | data | medium | low | dataset | Research substrate from verified digits |
 | bigger-pi-feat-023 | Schema extension: `computeBudgetCpuHours` for computation-run tasks | code | small | low | pr | Resolves the agent-lane vs. CPU-donation gap (governance) |
 | bigger-pi-feat-024 | Worker reputation + pseudonymous credit ledger | code | medium | medium | pr | Strengthens never-trust-one-worker; no PII |
 | bigger-pi-feat-025 | Cross-platform reproducibility matrix (OS/arch backends bit-identical) | maintenance | medium | low | document | Hardens the determinism contract |
 | bigger-pi-feat-026 | Funded-lane agent-assisted optimization spike (capped) | code | small | low | pr | Would set `lane=funded` + `fundedBudgetUsd` cap |
 | bigger-pi-feat-027 | Dependency / supply-chain audit + signed-release hardening | maintenance | small | low | pr | Recurring |
+| bigger-pi-feat-028 | Build-vs-reuse spike: bigger-pi as a BOINC project vs. custom coordinator | research | medium | low | document | Resolve before M2; BOINC already solves distribution/validation/credit |
+| bigger-pi-feat-029 | Standalone "verify someone else's claim" CLI (re-derives final hash from any dataset + manifest) | code | medium | low | pr | Seed of verification-as-a-service; reuses the harness |
+| bigger-pi-feat-030 | Generalized verified map-reduce for other constants (e, ζ(3), Catalan) + CC0 constant corpus | code | large | low | dataset | Constant-agnostic spin-off; oracle/benchmark for GMP/MPFR/Arb |
+| bigger-pi-feat-031 | Shared Elyos "independent-verification gate" primitive (runner-separated recompute + cross-formula check) | code | medium | low | pr | Reusable platform capability across Elyos projects |
 
 ---
 
@@ -275,14 +296,14 @@ Complete, schema-valid Task JSON for the first M0 task. `verifiedNeed` is `false
   "deliverable": "document",
   "tokenEstimate": "small",
   "status": "open",
-  "context": "bigger-pi is an open, distributed, verification-first effort to compute more digits of pi on donated compute, where the public good is the open, reproducible, independently-verified toolchain + chunk-coordination protocol + provenance ledger. The HARD RULE - no digit accepted or published without independent verification (dual computation bit-match + BBP/Bellard spot-check + per-chunk recompute) - is the project's spine. This task records the foundational architecture decisions that everything else depends on. Verification independence requires two genuinely independent bignum backends, and the verification harness's bit-identical contract depends on both the backend choice and the guard-digit policy, so these ADRs must land before the harness is finalized.",
+  "context": "bigger-pi is an open, distributed, verification-first effort to compute more digits of pi on donated compute, where the public good is the open, reproducible, independently-verified toolchain + chunk-coordination protocol + provenance ledger. The HARD RULE - no digit accepted or published without independent verification (one main Chudnovsky computation + independent-formula BBP/Bellard hex spot-check + per-chunk recompute; dual full computation reserved for small reference baselines to avoid doubling energy) - is the project's spine. This task records the foundational architecture decisions that everything else depends on. Verification independence requires two genuinely independent bignum backends, and the verification harness's bit-identical contract depends on both the backend choice and the guard-digit policy, so these ADRs must land before the harness is finalized.",
   "objective": "Record ADRs for: (1) a dual, independent bignum-backend strategy (a vetted open library plus a clean-room NTT/FFT path) and the FFI/WASM boundary; (2) the (P,Q,T) artifact serialization + hashing format; (3) the coordination protocol + append-only hash-chained ledger + reproducibility-manifest schema; (4) the guard-digit / rounding policy for the single-host final assembly; (5) the determinism contract defining what bit-identical means across backends and platforms.",
   "acceptanceCriteria": [
     "ADR selects two genuinely independent bignum backends with verification independence as the deciding criterion, and documents the LGPL-linking stance for any library used",
     "Artifact format ADR defines (P,Q,T) serialization plus SHA-256 and a second independent hash for content addressing",
     "Coordination + ledger ADR defines WorkUnit, ChunkResult, VerificationRecord, LedgerEntry, ReleaseManifest with an append-only hash-chained, signed ledger and no secrets anywhere in the schema",
     "Guard-digit policy specifies how G is chosen and how published precision excludes unstable trailing digits",
-    "Determinism contract states that exact-integer (P,Q,T) results are always identical and that final-assembly rounding is pinned by the guard-digit policy",
+    "Determinism contract states that exact-integer (P,Q,T) results are always identical, that the reproducible reference path uses integer/fixed-modulus NTT (not floating FFT) so bit-identity holds across architectures, and that final-assembly rounding is pinned by the guard-digit policy",
     "ADRs are reviewed by maintainer, algo reviewer, and the verification steward before M0 implementation tasks proceed"
   ],
   "resources": [

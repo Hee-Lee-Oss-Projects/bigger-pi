@@ -1,41 +1,62 @@
-# PLAN — bigger-pi (distributed, verified, open computation of more digits of π)
+# PLAN — bigger-pi (open, verifiable, reproducible, educational π-computation pipeline)
 
-> Status: Draft · Version: 0.1.0 · Last updated: 2026-06-28 · Owner: TBD (maintainer) · Lane: donated
+> Status: Draft · Version: 0.2.0 · Last updated: 2026-06-29 · Owner: TBD (maintainer) · Lane: donated
 
 ## Executive summary
 
-**bigger-pi** is an open, distributed, **verification-first** effort to compute more digits of π on
-donated compute. The intrinsic value of "more digits" is modest; the public good is the
-**open, reproducible, independently-verified toolchain + chunk-coordination protocol + provenance
-ledger** that produces them — most record-scale π software today is closed, bespoke, or
-unreproducible. bigger-pi turns a famously single-host, heroic-effort computation into a
-**citizen-science map-reduce** that ordinary donated machines can meaningfully contribute to, and
-proves every digit it publishes.
+**bigger-pi** is an open, **verification-first**, **reproducibility-first** π-computation pipeline run
+on donated compute. **It is explicitly *not* a digit-record attempt.** Setting the record is, and will
+remain, a single-node feat: the current 314-trillion-digit record (StorageReview, Dec 2025) ran
+y-cruncher on **one** server with 1.5 TB RAM and ~2 PB of SSD for ~110 days, and y-cruncher's own
+author states that distributed computing *cannot* set records. Binary splitting's merge tree is **not**
+embarrassingly parallel — the `(P,Q,T)` products near the root grow to roughly the full target size and
+are untransferable over consumer uplinks — so donated chunking is genuinely useful only up to a
+**scale ceiling of ~1e8–1e10 digits**, which we adopt as a first-class design fact, not an ambition to
+exceed.
+
+The intrinsic value of "more digits" is near-zero; the public good is the **open (MIT/CC0), reproducible,
+independently-verified toolchain + chunk-coordination protocol + provenance ledger** — most record-scale
+π software today is closed, bespoke, or unreproducible-from-a-public-ledger. bigger-pi turns a famously
+single-host, heroic-effort computation into an **educational, citizen-science map-reduce** (at moderate
+scale) where any ordinary donated machine contributes a *real, ledger-credited* chunk, and where
+**anyone can re-derive every published digit from a hash-chained ledger with one command.**
 
 The work runs in **two complementary, chunkable methods**:
 
 - **Method A — Chudnovsky + binary splitting (the full computation).** The series sum over a
   term-range `[a, b)` reduces to an exact integer triple `(P, Q, T)`. Independent workers compute
   sub-ranges in parallel; the triples merge hierarchically (a clean, associative map-reduce). Each
-  leaf range is a bounded, **credit-sized** task sized to one donated session. *Known constraint:*
-  the final full-precision multiply / divide / sqrt that assembles the record-scale result is
-  **memory-bound and consolidates on a single host** — distributed chunking scales the series work;
-  final assembly is the bottleneck at the frontier.
-- **Method B — BBP / Bellard hex-digit extraction (embarrassingly parallel + cross-check).**
-  Computes hex digits of π at an **arbitrary position without the preceding digits** — every chunk
-  ("hex digits at offset *k*") is fully independent, ideal for donated sessions **and** as an
-  independent-formula spot-check of Method A's results.
+  leaf range is a bounded, **credit-sized** task sized to one donated session. *Known constraints
+  (first-class design facts, not just risks):* (1) the upper levels of the merge tree multiply
+  integers approaching full target precision — near-root `(P,Q,T)` triples grow to ~the full digit
+  size (tens of MB at 1e8, hundreds of GB–TB at 1e12+), so they **cannot transit consumer uplinks**;
+  (2) the final full-precision multiply / divide / sqrt is **memory-bound and consolidates on a single
+  host**. Together these cap useful distribution at **~1e8–1e10 digits**: volunteers compute leaf /
+  low-level ranges while upper-level merges and final assembly stay on the coordinator or a designated
+  assembly host.
+- **Method B — BBP / Bellard hex-digit extraction (independent cross-check, NOT a base-10 extender).**
+  Computes **base-16 (hexadecimal)** digits of π at an **arbitrary position without the preceding
+  digits**. Crucial honesty: BBP/Bellard yields **position-specific hex digits only — it does NOT
+  produce or extend base-10 digits**, so it is a *verification* path, never a way to "add more decimal
+  digits." Each position is independent (ideal for donated sessions), but extracting the digit at
+  position *n* still costs ≈ O(n log n) work — cheap relative to a full run, not free. Its role is an
+  **independent-formula spot-check** of Method A's assembled result; the harness extracts and compares
+  hex consistently per the determinism contract.
 
 The project **alternates two task families**: **(1) algorithm/impl work** (chunking, bignum/FFT
 multiplication, merge, coordination, GPU/distribution) ↔ **(2) computation runs** (executing chunks
 to extend verified coverage).
 
 **The HARD RULE — the identity of the project.** *No digit result is accepted into the ledger or
-published without independent verification.* Verification means **two independent full computations
-agree bit-for-bit** (different implementation and/or bignum backend, ideally different operator)
-**and** an independent-code-path **BBP/Bellard hex-digit spot-check** passes, **and** every
-constituent chunk was itself recompute-verified. This gate is not a feature bolted on at the end; it
-is the spine, wired in at M0, and nothing ships around it.
+published without independent verification.* The **standard gate** (matching real record practice and
+honoring the no-waste energy guardrail) is: **(1)** one main Chudnovsky computation, **(2)** a cheap,
+**independent-code-path BBP/Bellard hex spot-check** (≥ 64 random offsets + the hex tail), **(3)**
+every constituent chunk recompute-verified + hashed, **(4)** a known-published-reference prefix match,
+and **(5)** recorded guard-digit analysis. **Dual *full* independent computation is reserved** for
+small reference baselines or where BBP coverage is insufficient — it is *not* the default, because
+running two full computations for every result would **double CPU-hours and energy** and contradict
+the project's "no compute for compute's sake" guardrail. This gate is not a feature bolted on at the
+end; it is the spine, wired in at M0, and nothing ships around it.
 
 **Risk tier: medium.** Not health/legal/safety, but medium for three real reasons: (1) publishing
 **unverified or false digits** would damage trust and waste effort; (2) large computation has a real
@@ -43,7 +64,7 @@ is the spine, wired in at M0, and nothing ships around it.
 (3) a distributed-compute coordinator is **abuse-prone** — it must never become a covert botnet or
 run on non-consenting machines. The medium-risk gate is satisfied by mandatory expert review of the
 **verification methodology** (guard-digit analysis, spot-check sufficiency, two-method independence)
-before any record-scale run is published.
+before any large-scale run is published.
 
 **Honesty note on the partner & need.** This is a **moonshot** with indirect beneficiaries (open-
 numerical-computing, math/CS education, distributed-compute citizen science). **No partner
@@ -58,8 +79,10 @@ computing, yet the state of the art has three gaps that bigger-pi exists to clos
 
 1. **It is effectively single-machine and elite.** Record runs require one very large, very
    expensive consolidation machine and bespoke engineering; ordinary contributors are spectators.
-   π is genuinely *chunkable*, so distributed donated compute *can* be a real contributor — but no
-   open, well-documented coordination protocol packages the work into credit-sized units.
+   π is genuinely *chunkable* at moderate scale, so distributed donated compute *can* be a real
+   contributor **up to the ~1e8–1e10-digit ceiling** (beyond which near-root triples and final
+   assembly dominate) — but no open, well-documented coordination protocol packages the work into
+   credit-sized units. This is a participation/education gap, **not** a record gap.
 2. **The toolchain is largely closed or unreproducible.** Much record software is proprietary or
    one-off; results are announced but rarely **independently reproducible from a public ledger**.
 3. **Verification is under-shared.** The methods that make a digit claim trustworthy (dual
@@ -101,8 +124,9 @@ in writing.
   never covertly, never on others' resources.
 
 **Non-goals (constraints as identity).**
-- **Not a record-at-any-cost chase.** We will not publish a "world record" claim that isn't
-  independently reproducible from the public ledger; reproducibility outranks the headline.
+- **Not a digit-record attempt.** We do not chase or claim a world record. The record is a single-node
+  feat and distributed computing cannot set it (per y-cruncher's author); we design to the ~1e8–1e10
+  distributed ceiling. Reproducibility and verifiability outrank any headline number.
 - **Never publish unverified digits.** A result that fails any limb of the HARD RULE is not
   published, full stop — even if "probably right."
 - **Not a covert distributed-compute scheme / botnet / proof-of-work coin.** No execution of
@@ -121,10 +145,10 @@ Outcome-centric and honest for a moonshot. Baselines are 0 unless noted.
 
 | Outcome | Baseline | Target | How measured |
 | --- | --- | --- | --- |
-| Published digits that are independently verified (dual computation + BBP) | n/a | **100% (non-negotiable)** | Ledger verification records; any exception is a sev-1 incident |
+| Published digits that are independently verified (independent-formula BBP cross-check + per-chunk recompute; dual-full for baselines) | n/a | **100% (non-negotiable)** | Ledger verification records; any exception is a sev-1 incident |
 | Unverified/false results published | 0 | **0 (hard)** | Incident log; release gate audit |
 | Reproducibility: published results re-derivable to the same final hash by an independent party | n/a | **100%** | Independent repro from public ledger + repro command |
-| Verified precision milestone reached (Method A, distributed-then-merged, bit-matching single host) | 0 digits | A verified milestone at M1 (≥ 1e8 baseline target) and a larger M4 run sized to donated budget | ReleaseManifest + two-method agreement |
+| Verified precision milestone reached (Method A, distributed-then-merged, bit-matching single host) | 0 digits | A verified **educational-scale** milestone at M1 (≥ 1e8) and a larger M4 run **within the ~1e8–1e10 distributed ceiling**, sized to justified donated budget (never record-adjacent) | ReleaseManifest + independent-formula (BBP) agreement |
 | Bit-identical map-reduce: merged chunk result == single-host result | n/a | 100% on every run | Determinism test in CI; merge equality check |
 | Independent compute donors contributing verified chunks | 0 | ≥ 10 distinct donors by M2; growth thereafter | Pseudonymous worker records (opt-in) |
 | External reuse of toolchain / dataset / protocol | 0 | ≥ 3 documented reuses | Citations, forks-with-use, dataset downloads-with-use |
@@ -135,6 +159,53 @@ Outcome-centric and honest for a moonshot. Baselines are 0 unless noted.
 We deliberately avoid vanity metrics (raw digit count alone, GitHub stars). The headline number is
 meaningless unless it is **verified and reproducible**, so the integrity metrics outrank the scale
 metric.
+
+## Competitive landscape & differentiation
+
+Two non-overlapping worlds exist today, and **neither occupies the niche bigger-pi targets.**
+
+**Record-setters (the scale frontier — bigger-pi does NOT compete here).**
+- **y-cruncher (Alexander J. Yee)** — the **closed-source, single-node** engine behind essentially
+  every modern π record (Chudnovsky + an independent-formula verification), with extreme optimization
+  and disk-backed swap-mode scaling. **Its author explicitly states distributed computing cannot set
+  records.** Not open, not a teaching artifact, not reproducible from a public ledger.
+- **StorageReview — 314 trillion digits (Dec 2025)** — the current record: a single Dell PowerEdge
+  R7725, 1.5 TB RAM, ~2 PB SSD, ~110 days (~4,305 kWh). Hardware-heroics, not open/reproducible/
+  educational.
+- **Google Cloud — 100 trillion digits (Emma Haruka Iwao, 2022; 31.4T in 2019)** — y-cruncher on large
+  cloud VMs with strong public communication, but still single-(large)-instance, closed engine, and
+  cloud-cost-gated participation.
+
+**Distributed / donated-compute peers (the real peer group — copy these patterns).**
+- **GIMPS / PrimeNet** — the 25+ year gold standard for volunteer math compute: central work-unit
+  server, background client, **checkpoint every ~30 min**, cheap in-line error-check (Gerbicz) +
+  recheck. Caveat: prime search is *independent per candidate*; π's merge tree is **not**, so we cannot
+  copy its trust model wholesale.
+- **BOINC** — the generic volunteer-computing platform (work-unit splitting, capability-aware
+  scheduling, **validation via redundant computation**, credit). This is essentially the coordinator /
+  redundancy / credit layer bigger-pi would otherwise rebuild — hence an explicit **build-vs-reuse**
+  decision (see Open questions / Roadmap M2).
+- **Folding@home** — proof that a million volunteer GPUs ≈ exascale throughput; but its workloads are
+  *independent* (no global merge), a cautionary contrast for π's merge tree.
+- **PiHex (Colin Percival, 1998–2000)** — the **direct precedent**: distributed **Bellard/BBP**
+  extraction of isolated π **bits** (1,734 computers, 56 countries). It distributed independent *bits*,
+  never a contiguous decimal range, was not reproducible from a public ledger, and is dormant —
+  precisely our opening.
+
+**The gap (bigger-pi-shaped).** No one offers an **open, reproducible, ledger-backed,
+independently-verified, educational π pipeline with a documented distributed merge.**
+
+**Differentiators (how we win without competing on scale).**
+- **Reproducibility-first, ledger-backed provenance** — *anyone re-derives every published digit from a
+  public hash-chained ledger + one command.* No record holder offers this; it is the single strongest
+  wedge.
+- **Verification-as-identity, not a footnote** — independent BBP cross-check + per-chunk recompute, with
+  the steward separated from the runner. Trustworthiness, not scale, is the product.
+- **Open MIT/CC0 end-to-end** vs. closed y-cruncher — forkable, auditable, teachable.
+- **Genuinely participatory at human scale** — a student's laptop contributes a real verified chunk and
+  earns ledger credit (the GIMPS/BOINC hook, applied to π, with a transparent merge).
+- **Honest scoping as a feature** — publicly stating "we make π computation *verifiable and learnable*;
+  we do not chase the record" is itself differentiating in a headline-driven field.
 
 ## Scope
 
@@ -190,25 +261,39 @@ triple merge) → **single-host final assembly** → **verify** → **publish**.
 - **Method B — BBP/Bellard extractor.** Computes hex digit(s) at offset `k` via modular
   exponentiation, fully independent per chunk. Serves both as standalone coverage and — critically —
   as an **independent-formula** spot-check of Method A's assembled result.
-- **Verification harness (enforces the HARD RULE).** (a) Dual full computation: a second independent
-  backend/implementation re-derives the result; **bitwise compare** (excluding declared guard
-  digits). (b) BBP/Bellard **hex spot-checks** at ≥ 64 random offsets plus the hex tail, all matching
-  the assembled binary. (c) **Per-chunk recompute**: each chunk independently recomputed and its hash
-  matched before it enters the merge. (d) **Known-reference cross-check** against published reference
-  values for overlapping prefixes. (e) **Guard-digit / rounding analysis** documenting the `G`
-  trailing digits excluded from publication. A result is "Verified" **only if all limbs pass.**
+- **Verification harness (enforces the HARD RULE).** The **standard gate is one full computation +
+  independent-formula cross-check**, not two full runs (energy guardrail): (a) BBP/Bellard **hex
+  spot-checks** at ≥ 64 random offsets plus the hex tail, all matching the assembled value — an
+  **independent formula**, not a re-run (note: this compares *base-16* digits, so extraction/compare is
+  pinned by the determinism contract). (b) **Per-chunk recompute**: each chunk independently recomputed
+  and its hash matched before it enters the merge. (c) **Known-reference cross-check** against published
+  reference values for overlapping prefixes. (d) **Guard-digit / rounding analysis** documenting the `G`
+  trailing digits excluded from publication. (e) **Dual full computation (reserved, not default):** a
+  second independent backend re-derives the result and is **bitwise compared** (excluding guard digits)
+  — used only for small reference baselines or where BBP coverage is insufficient, since running two
+  full computations per result doubles CPU-hours/energy. A result is "Verified" **only if every
+  applicable limb passes.**
 - **Chunker + work-unit manifest.** Splits `[0, N)` into independent, credit-sized term-range work
   units, each carrying a **per-chunk CPU-time and memory cap** so a single chunk fits one donated
   session and cannot run away.
 - **Merge/reduce engine.** Hierarchical, associative combine of accepted `(P, Q, T)` triples into the
   root triple; result must be **bit-identical** to the single-host computation of the same range.
+  **Topology matches the bandwidth reality:** volunteers only ever handle small leaf / low-level ranges;
+  upper merge levels (where near-root triples balloon toward full size) and the final assembly stay on
+  the coordinator or a designated assembly host. Triples are streamed/compressed in transit.
 - **Coordination service + ledger.** Assigns work units, collects results + checksums, orchestrates
-  verification (dispatching the 2nd-worker recompute), records merge/release state. The **ledger is
+  verification (dispatching the 2nd-worker recompute), records merge/release state. **Redundancy is a
+  tunable** (à la BOINC validation): a default quorum (e.g., 2×) with tie-break recompute and
+  reputation-weighted assignment, so redundant verification — the dominant cost at scale — is bounded
+  and disputed units are adjudicated by recompute + hash, never by judgment. The **ledger is
   append-only and hash-chained** (each entry references the prior entry's hash) and signed; it is the
   public provenance record from which any result is reproducible.
 - **Worker client (donated compute).** A signed, open client the donor runs **on their own machine
   with explicit consent**; fetches a work unit, computes within caps, returns result + checksum +
-  environment metadata. Pseudonymous, opt-in attribution; no PII.
+  environment metadata. **GIMPS-style checkpoint/restart** (periodic state save) lets interrupted
+  laptop-class sessions resume without losing work. **Client-side self-checking arithmetic** (e.g.,
+  mod-p residue checks per chunk, analogous to GIMPS's Gerbicz check) catches most bad results before
+  they consume verification budget. Pseudonymous, opt-in attribution; no PII.
 
 **Tech stack.** TypeScript/ESM + pnpm for the coordinator, CLI, ledger, manifests, and
 orchestration (consistent with Elyos conventions). The numeric inner loops use the chosen bignum
@@ -259,13 +344,33 @@ ReleaseManifest {
 2. **`(P, Q, T)` artifact format** — serialization + hashing of triples for transport and ledgering.
 3. **Coordination protocol + ledger schema** — work-unit lifecycle, hash-chaining, signing.
 4. **Guard-digit policy** — how `G` is chosen and how published precision excludes unstable digits.
-5. **Determinism contract** — what "bit-identical" means across backends/platforms (e.g., exact
-   integers identical always; final-assembly rounding pinned by the guard-digit policy).
+5. **Determinism contract** — what "bit-identical" means across backends/platforms (exact integers
+   identical always; final-assembly rounding pinned by the guard-digit policy). **The reproducible
+   reference path uses integer-only / fixed-modulus NTT (with CRT), never floating-point FFT** —
+   floating-NTT rounding and SIMD reassociation would silently break bit-identity across architectures.
+   Hex extraction/compare for BBP cross-checks is likewise pinned so the cross-check is reproducible.
 
 **Decision ordering (important).** The **bignum-backend ADR (#1) and guard-digit policy (#4) are
 decided before** the verification harness is finalized — the harness's "bit-identical" contract and
 spot-check sufficiency depend on both. TASKS.md sequences this (verification harness depends on the
 ADR task).
+
+**LLM (Claude) leverage — and the hard wall.** Claude is used to **build, explain, and orchestrate**,
+never to assert mathematical truth:
+- *Where it helps:* implementing/optimizing the **clean-room NTT/FFT bignum backend**, the
+  binary-splitting recurrence, and the Bellard extractor; writing the **verification harness + test
+  suite** (BBP spot-check selection, determinism/repro CI, property-based merge-associativity tests,
+  dependency-license + no-secrets audits); authoring **classroom explainers** (binary splitting, NTT,
+  BBP); coordinator/manifest/chunk-sizing glue; and keeping provenance citations / patent-encumbrance
+  review current. (Donated lane, or `packages/runner` with a hard `fundedBudgetUsd` cap for funded
+  optimization spikes.)
+- *The hard wall (non-negotiable):* **No numeric result is ever asserted by the LLM** — digits are
+  accepted only when produced and verified by independent *algorithms/code* (BBP cross-check +
+  per-chunk recompute). **No hallucinated digits ever enter the ledger.** Verification gates live in
+  **deterministic code, not in a prompt** (Claude may *write* the gate; it may never *be* the gate).
+  No LLM sits in the trust path of result adjudication — disputed units resolve by recompute + hash.
+  Every Claude-authored numeric routine is treated as an **untrusted contributor** and must pass the
+  same determinism + cross-backend + known-reference gates before use.
 
 ## Data, licensing & compliance
 
@@ -318,22 +423,24 @@ digit claim, or a wasteful/abusive compute run, can do real harm to trust and to
   breaks bit-reproducibility or weakens the verification gate **cannot merge**, regardless of speed
   gains.
 - **Computation-run tasks:** **no result enters the ledger or is published unless the HARD RULE
-  passes** — (1) two independent full computations bit-identical (different backend/impl, ideally
-  different operator), (2) BBP/Bellard independent-path hex spot-checks all pass, (3) every
-  constituent chunk recompute-verified and hashed, (4) known-reference prefix match, (5) guard-digit
-  analysis recorded. The **verification steward** (independent of whoever ran the computation) signs
-  off; an author may **not** verify their own run.
+  passes** — the standard gate: (1) one main Chudnovsky computation, (2) BBP/Bellard independent-path
+  hex spot-checks all pass, (3) every constituent chunk recompute-verified and hashed, (4)
+  known-reference prefix match, (5) guard-digit analysis recorded. **Dual full computation is reserved**
+  for small reference baselines or where BBP coverage is insufficient (it doubles energy, so it is not
+  the default). The **verification steward** (independent of whoever ran the computation) signs off; an
+  author may **not** verify their own run.
 - **Expert review (medium-risk gate):** a **computational-mathematics / numerical-analysis SME**
   reviews and signs off the **verification methodology** — guard-digit derivation, BBP spot-check
   count sufficiency (the probability bound on an undetected error region), and the genuineness of
-  two-method/two-backend independence — **before any record-scale run is published** (M4).
+  independent-formula / backend independence — **before any large-scale run is published** (M4).
 - **Determinism & reproducibility:** every release must be re-derivable to the same `finalResultHash`
   by an independent party using only the public ledger + repro command.
 
 **Definition of Shipped (project-level).** A **verified, reproducible π computation** that:
 (1) was produced by independent, credit-sized chunks merged map-reduce to a **bit-identical**
-single-host result; (2) passes the full **HARD RULE** (dual computation + BBP spot-check + per-chunk
-recompute + reference cross-check + guard-digit analysis); (3) is published as an **open CC0 dataset
+single-host result; (2) passes the full **HARD RULE** (one main computation + independent-formula BBP
+spot-check + per-chunk recompute + reference cross-check + guard-digit analysis; dual-full reserved for
+baselines); (3) is published as an **open CC0 dataset
 + ReleaseManifest + one-command reproduction**, with compute/energy cost disclosed; (4) was produced
 on **consenting donated compute** within per-chunk and per-run caps; and (5) the verification
 methodology carries **SME sign-off**. Until a partner is secured, criterion-set (1)–(5) defines a
@@ -363,11 +470,17 @@ Phased; each phase has measurable exit criteria. M0 is a thin, end-to-end cold-s
 
 - **M2 — Distributed coordination + donated-compute worker client.**
   Goal: a real (not simulated) coordinator + signed worker client so independent donors run chunks on
-  their **own** machines with consent + caps; public hash-chained ledger; abuse guardrails.
+  their **own** machines with consent + caps; public hash-chained ledger; abuse guardrails. A
+  **build-vs-reuse decision (custom coordinator vs. running as a BOINC project)** is made here — BOINC
+  already solves work distribution, redundant validation, and credit. The Elyos
+  CPU-donation **schema gap** (`computeBudgetCpuHours`) is resolved **before** this milestone, not
+  during it.
   Exit: ≥ 10 distinct external donors complete + verify chunks through the live coordinator; every
-  accepted chunk has a 2nd-worker recompute match; ledger is public, append-only, hash-chained, and
-  reproducible; the anti-abuse threat model (consent, caps, signed client, never-trust-one-worker,
-  no covert/non-consenting use) is implemented and documented.
+  accepted chunk has a 2nd-worker recompute match within a stated **redundancy factor** (quorum +
+  tie-break); the worker client supports **GIMPS-style checkpoint/restart** and client-side self-check;
+  ledger is public, append-only, hash-chained, and reproducible; the anti-abuse threat model (consent,
+  caps, signed client, never-trust-one-worker, no covert/non-consenting use) is implemented and
+  documented.
 
 - **M3 — Algorithm/perf hardening (NTT/FFT, GPU optional, Bellard speedups).**
   Goal: the algorithm-work family — faster bignum multiplication (NTT/FFT as the second independent
@@ -377,18 +490,21 @@ Phased; each phase has measurable exit criteria. M0 is a thin, end-to-end cold-s
   maintained; every perf change passes the determinism + verification tests (no perf change ships if
   it breaks bit-reproducibility); SME review of the verification methodology completed.
 
-- **M4 — Verified record-scale run + open dataset release.**
-  Goal: an extended-precision run beyond the M1 baseline (target sized to justified donated budget),
-  fully HARD-RULE verified, published as an open dataset + reproducibility package, with the
-  final-assembly bottleneck addressed or honestly scoped to the largest feasible target.
-  Exit: a new **verified** digit milestone with two-method agreement + BBP spot-checks + per-chunk
+- **M4 — Verified moderate-scale run + open dataset release.**
+  Goal: an extended-precision run beyond the M1 baseline (target **within the ~1e8–1e10 distributed
+  ceiling**, sized to justified donated budget — explicitly not record-adjacent), fully HARD-RULE
+  verified, published as an open dataset + reproducibility package, with the single-host final-assembly
+  bottleneck honestly scoped to the largest feasible target.
+  Exit: a new **verified** digit milestone with independent-formula (BBP) agreement + per-chunk
   verification; **SME-signed verification methodology**; CC0 dataset + ReleaseManifest + repro package
   published; compute/energy cost disclosed; **zero unverified digits published.**
 
 - **M5 — Research/education outputs + partner adoption (ongoing).**
   Goal: convert the verified toolchain into reusable public good — explainers (binary splitting, BBP,
-  NTT), a normality/statistics-ready dataset, and the reusable distributed-verified-map-reduce pattern
-  — and secure a research/education partner.
+  NTT), a normality/statistics-ready dataset, the reusable distributed-verified-map-reduce pattern, and
+  a standalone **"verify someone else's claim" CLI** (takes any published π dataset + manifest and
+  re-derives the final hash — the seed of verification-as-a-service) — and secure a research/education
+  partner.
   Exit: ≥ 1 educational artifact published + used; ≥ 1 external reuse of the toolchain/dataset/protocol;
   **named research/education partner — TO BE SECURED** (on success, `verifiedNeed` flips to `true`).
 
@@ -412,7 +528,7 @@ milestone, milestone Definitions of Done, a backlog, and a complete, schema-vali
 - **Verification steward: TBD** — owns the HARD RULE gate, **independent of whoever ran a
   computation**; an author may never verify their own run. Signs the `VerificationRecord`.
 - **Expert reviewer (medium-risk sign-off): TO BE SECURED** — a computational-mathematics /
-  numerical-analysis SME who signs off the **verification methodology** before any record-scale
+  numerical-analysis SME who signs off the **verification methodology** before any large-scale
   publication (guard-digit analysis, spot-check sufficiency, backend independence).
 - **Compute-donor coordinator: TBD** — supports donors, manages the signed worker-client releases,
   and the consent/abuse posture.
@@ -443,12 +559,12 @@ milestone, milestone Definitions of Done, a backlog, and a complete, schema-vali
 
 | Risk | Likelihood | Impact | Mitigation | Owner |
 | --- | --- | --- | --- | --- |
-| Publishing unverified / false digits | Low | High | HARD RULE: dual independent computation bit-match + BBP spot-check + per-chunk recompute + reference cross-check; verification steward independent of the runner; any breach is a sev-1 | Verification steward |
+| Publishing unverified / false digits | Low | High | HARD RULE standard gate: independent-formula BBP/Bellard cross-check + per-chunk recompute + reference cross-check + guard-digit analysis (dual-full computation reserved for baselines); verification steward independent of the runner; any breach is a sev-1 | Verification steward |
 | Correlated bug in a single bignum backend passes verification | Medium | High | Two **genuinely independent** backends (vetted library + clean-room NTT); BBP/Bellard is an **independent formula**, not just a re-run; known-reference cross-check | Algorithm reviewer |
-| Wasted compute / energy ("compute for compute's sake") | Medium | Medium | Per-chunk CPU/memory caps; per-run total budget + justification + energy disclosure; no duplicate assignment beyond the required verification copy | Maintainer |
+| Wasted compute / energy ("compute for compute's sake") | Medium | Medium | **One-computation + BBP standard gate (not dual-full)** to avoid doubling energy; per-chunk CPU/memory caps; per-run total budget + justification + energy disclosure; bounded redundancy factor; no duplicate assignment beyond the required verification copy | Maintainer |
 | Coordinator misused as a botnet / runs on non-consenting machines | Low | High | Signed open worker client run by the donor on their own machine with explicit consent; no execution of donor-supplied code on the coordinator; anti-abuse threat model (M2); kill switch | Compute-donor coordinator |
 | Malicious worker returns wrong/forged results | Medium | High | Never trust one worker: mandatory 2nd-worker recompute + hash match + spot-check before acceptance; pseudonymous reputation; reject on mismatch | Verification steward |
-| Single-host final-assembly bottleneck blocks record scale | High | Medium | Benchmark + document early (M1); scope targets to feasible memory; treat frontier consolidation as an explicit, separate engineering problem, not a hidden assumption | Algorithm reviewer |
+| Near-root triple size + single-host final-assembly cap distribution (the ~1e8–1e10 ceiling) | High | Medium | Adopt the ceiling as a first-class design fact; keep upper merge levels + assembly on the coordinator/assembly host; benchmark + document early (M1); treat frontier consolidation as an explicit, separate (out-of-scope) problem, not a hidden assumption | Algorithm reviewer |
 | Guard-digit / rounding error in final assembly | Medium | High | Documented guard-digit policy; publish precision minus `G`; SME review of the analysis | Algorithm reviewer + SME |
 | Perf optimization breaks bit-reproducibility | Medium | High | Determinism + verification tests gate every perf PR; no perf change merges if reproducibility breaks | Maintainer |
 | Algorithm/library patent or license incompatibility | Low | High | Verify methods are unencumbered + cite primary papers; dependency-license audit in CI; clean-room MIT NTT guarantees a permissive path | Maintainer |
@@ -503,6 +619,25 @@ leakage** into artifacts/logs.
 - **Low lock-in:** MIT/CC0, commodity-hardware reference path, standard tooling — cheap to run and
   forkable, improving long-term survivability.
 
+## Adjacent opportunities (spin-offs)
+
+The verification + coordination layer is constant-agnostic; several larger public goods fall out of it,
+and are arguably worth more than π itself:
+
+- **Generalized donated-compute coordinator** — a reusable "verified map-reduce for any binary-splitting
+  hypergeometric series" (e, ζ(3)/Apéry, Catalan, log 2), a BOINC-adjacent contribution.
+- **Verification-as-a-service** — "give us your long-computation result + repro command; we
+  independently re-derive and certify it." A standalone product reusing the entire harness (seeded by
+  the M5 "verify someone else's claim" CLI), serving other arbitrary-precision projects as an oracle.
+- **Other constants + a CC0 constant corpus** — verified digit datasets (e, ζ(3), Catalan, …) as an
+  oracle/benchmark for arbitrary-precision libraries (GMP, MPFR, Arb).
+- **Normality / statistics research substrate** — a clean, provenance-tagged CC0 digit corpus.
+- **Education track as a product** — an interactive "compute π and prove it" course built around the
+  algorithm-work ↔ computation-run loop.
+- **Shared Elyos "independent-verification gate" primitive** — bigger-pi's HARD RULE (independent
+  recompute + cross-formula check, runner separated from verifier) is a reusable Elyos *platform*
+  capability other projects can consume, not a per-project reinvention.
+
 ## Open questions
 
 1. **Compute-donation lane gap (needs a human/governance decision).** Elyos lanes model **agent
@@ -512,16 +647,31 @@ leakage** into artifacts/logs.
    cap field). **Proposal:** treat computation-run tasks as `data`/`dataset` tasks, document the
    per-chunk compute/memory cap in `context` for now, and **extend the schema** with an optional
    `computeBudgetCpuHours` (analogous to `fundedBudgetUsd`). Decision needed from governance.
-2. **Record-scale target & budget.** What total compute/energy budget (and therefore digit target) is
-   justified for M4? This must be approved against the energy-cost disclosure, not chased open-ended.
+2. **Moderate-scale target & budget (framed by outcomes, not digit count).** What total compute/energy
+   budget (and therefore digit target, within the ~1e8–1e10 ceiling) is justified for M4? Because "more
+   π digits" has near-zero intrinsic value, the budget must be justified against **education /
+   verification / reproducibility outcomes**, approved in advance against the energy-cost disclosure,
+   and never chased open-ended.
 3. **Final-assembly consolidation host.** Who provides the large-memory single host for the final
    multiply/divide/sqrt at scale? This is the hard bottleneck; the frontier target depends on it.
 4. **Bignum backend choices (ADR #1).** Which vetted library + the scope of the clean-room NTT;
    LGPL-linking stance documented.
 5. **Verification SME.** Who is the numerical-analysis SME for the medium-risk methodology sign-off?
-6. **Partner org.** Which research/education or distributed-computing partner, if any?
+6. **Partner org & wedge.** Which partner, and which wedge — a **university math/CS department**
+   (education) **or** an existing **volunteer-compute org / BOINC** (distribution)? Pursuing both
+   dilutes; pick one first.
 7. **GPU scope.** Is a GPU path in-scope for M3, or backlog? (Verification gate is unchanged either
-   way.)
+   way; follows Folding@home's evidence that volunteer GPUs dominate throughput.)
+8. **Build vs. reuse (BOINC).** Build a coordinator from scratch, or run **bigger-pi as a BOINC
+   project**? BOINC already solves work distribution, redundant validation, and credit — a
+   milestone-sized decision to resolve at/before M2.
+9. **Energy-justification threshold.** Given that the honest product is the *pipeline*, what
+   public-good threshold justifies any compute spend at all? Frame against education/verification
+   outcomes, not digit counts.
+
+*Resolved in v0.2 (previously open):* the **verification cost model** — standard gate is one
+computation + BBP, dual-full reserved (no longer 2× energy by default); and the **determinism
+contract** — reproducible reference path uses integer/fixed-modulus NTT, not floating FFT (ADR #5).
 
 ## References
 
@@ -533,6 +683,12 @@ leakage** into artifacts/logs.
   Bailey, Borwein & Plouffe (1995/1997), the BBP formula; F. Bellard, Bellard's formula; binary
   splitting for hypergeometric series; Schönhage–Strassen / NTT-based multiplication.
 - Prior art for distributed digit extraction: the PiHex project (distributed BBP hex-digit computation).
+- Competitive landscape (see `COMPETITIVE-ANALYSIS.md` for full citations): y-cruncher (A. J. Yee) — the
+  closed single-node record engine, author's note that distributed computing cannot set records;
+  StorageReview 314-trillion-digit record (Dec 2025, single Dell R7725); Google Cloud 100-trillion
+  digits (E. H. Iwao, 2022).
+- Donated-compute peer models: GIMPS / PrimeNet (checkpoint/restart, in-line error-check); BOINC
+  (work-unit splitting, redundant validation, credit); Folding@home (volunteer GPU throughput).
 
 ---
 
@@ -626,3 +782,34 @@ the verification SME; and the partner org. None block M0–M1.
 **Verdict:** Approved as a Draft (v0.1.0) baseline for review. The verification gate and
 reproducibility posture are strong enough to begin M0; the named-human dependencies (steward, SME,
 partner) and the compute-lane schema decision are the gating items before scale.
+
+## Changelog — v0.2 (analysis merged)
+
+Merges `COMPETITIVE-ANALYSIS.md` (2026-06-29) into the plan. One line per fix/addition:
+
+- Reframed the goal honestly: retired any beat-the-record ambition; the deliverable is an **open,
+  verifiable, educational, reproducible** π pipeline (title, exec summary, non-goals, success metric).
+- Stated the **~1e8–1e10-digit distributed ceiling** as a first-class design fact (exec summary, Method
+  A constraints, Problem gap #1, merge topology, M4, risks).
+- Cited the infeasibility evidence: 314T single-node record (StorageReview, Dec 2025) and y-cruncher
+  author's "distributed computing cannot set records" (exec summary, landscape).
+- Explained the merge tree is **not** embarrassingly parallel — near-root triples grow to full size and
+  are untransferable over consumer uplinks (Method A, merge engine).
+- Fixed the energy/verification design: **standard gate = one Chudnovsky computation + independent
+  BBP/Bellard hex spot-check + per-chunk recompute**; dual-full computation **reserved** for baselines
+  (HARD RULE, harness, quality gates, Definition of Shipped, risks).
+- Clarified BBP/Bellard yields **base-16 position-specific** digits only — a verification path, **not** a
+  base-10 extender, and ≈ O(n log n) per position, not free (Method B, harness).
+- Added the **Competitive landscape & differentiation** section (y-cruncher, StorageReview 314T, Google
+  Cloud 100T; peers GIMPS/PrimeNet/BOINC/Folding@home/PiHex; reproducibility-first wedge).
+- Folded **Claude/LLM leverage** into architecture with the hard wall (numeric truth only from
+  independent algorithms; no hallucinated digits in the ledger; Claude code is an untrusted contributor).
+- Strengthened the **determinism contract** (integer / fixed-modulus NTT, not floating FFT) so
+  bit-identity holds across architectures (ADR #5).
+- Folded optimizations into the roadmap: GIMPS-style **checkpoint/restart**, client-side self-check,
+  tunable **redundancy factor**, **build-vs-reuse (BOINC)** decision, triple-streaming topology, GPU
+  path, standalone **"verify someone else's claim" CLI**.
+- Added the **Adjacent opportunities** section (generalized donated-compute coordinator,
+  verification-as-a-service, other constants e/ζ(3)/Catalan, shared Elyos verification-gate primitive).
+- Merged Open questions (build-vs-reuse, partner wedge, energy-justification threshold; marked
+  verification-cost-model and determinism as resolved); added landscape references.
