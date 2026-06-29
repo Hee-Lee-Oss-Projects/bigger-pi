@@ -1,0 +1,32 @@
+{
+  "id": "bigger-pi-feat-028",
+  "title": "ADR: build custom coordinator vs. run bigger-pi as a BOINC project",
+  "project": "bigger-pi",
+  "type": "design-spec",
+  "lane": "donated",
+  "priority": "medium",
+  "domain": ["distributed-computing", "software", "research"],
+  "riskTier": "low",
+  "urgent": false,
+  "deliverable": "document",
+  "tokenEstimate": "medium",
+  "status": "open",
+  "context": "PLAN.md v0.2 adds open question #8: whether to build a custom coordinator from scratch or to run bigger-pi as a BOINC project. BOINC already solves work distribution, redundant validation, and credit. The plan explicitly frames this as a milestone-sized decision to be resolved at or before M2, noting that the Elyos computeBudgetCpuHours schema gap (feat-023) must also be resolved before M2. The choice has second-order effects on the coordinator (coord-011), worker client (worker-012), redundancy factor design, and the abuse guardrails (abuse-013). The ADR must land before M2 implementation begins.",
+  "objective": "Produce an ADR that evaluates building a custom coordinator vs. adopting BOINC as the distribution/validation/credit layer for bigger-pi, and records the decision with rationale.",
+  "acceptanceCriteria": [
+    "Evaluates the build-vs-reuse trade-off: custom coordinator (full control, no external dependency, more build effort) vs. BOINC (work distribution, redundant validation, credit already solved; external dependency and BOINC-project onboarding overhead).",
+    "Documents which BOINC capabilities would be reused or replaced in each path, and how the determinism contract, HARD RULE verification gate, and abuse guardrails are satisfied in each path.",
+    "Documents the impact on the coordinator (coord-011), worker client (worker-012), and the redundancy/quorum design.",
+    "Records a single decision (custom or BOINC) with rationale, trade-offs, and any conditions or constraints; reviewed by the maintainer before M2 begins.",
+    "Licensed CC-BY-4.0."
+  ],
+  "resources": [
+    "PLAN.md",
+    "TASKS.md",
+    "COMPETITIVE-ANALYSIS.md"
+  ],
+  "output": "An ADR document for the build-vs-reuse (custom coordinator vs. BOINC) decision that gates M2.",
+  "requestor": "TBD",
+  "verifiedNeed": false,
+  "outputLicense": "CC-BY-4.0"
+}

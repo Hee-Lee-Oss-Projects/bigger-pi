@@ -1,0 +1,31 @@
+{
+  "id": "bigger-pi-feat-030",
+  "title": "Standalone 'verify someone else's claim' CLI: re-derive final hash from any published pi dataset + manifest",
+  "project": "bigger-pi",
+  "type": "code",
+  "lane": "donated",
+  "priority": "low",
+  "domain": ["mathematics", "distributed-computing", "software", "verification"],
+  "riskTier": "medium",
+  "urgent": false,
+  "deliverable": "pr",
+  "tokenEstimate": "large",
+  "status": "open",
+  "context": "PLAN.md v0.2 adds a new M5 deliverable: a standalone 'verify someone else's claim' CLI that takes any published pi dataset + manifest and re-derives the final hash, described as the seed of verification-as-a-service. This is distinct from the project's internal verification harness (verify-004, verify-009): it is an outward-facing tool that can validate third-party pi claims using bigger-pi's open reproducibility infrastructure. It also anchors the 'verification-as-a-service' adjacent opportunity listed in v0.2. Depends on release-018 and verify-004.",
+  "objective": "Build a standalone CLI that takes any published pi digit dataset and ReleaseManifest as input and re-derives the deterministic final hash, enabling independent parties to verify third-party pi claims using bigger-pi's open infrastructure.",
+  "acceptanceCriteria": [
+    "Accepts a published pi digit dataset and a ReleaseManifest as input and re-derives the finalResultHash using only the public ledger data and the repro command, matching the CLI interface described in PLAN.md.",
+    "The CLI reports clearly pass/fail with the computed hash vs. the claimed hash; it can validate both bigger-pi's own published results and third-party claims that conform to the ReleaseManifest schema.",
+    "No secrets, API keys, or PII required or stored; all inputs are public artifacts.",
+    "Ships with documentation and an example walkthrough re-verifying a known published pi result; MIT-licensed."
+  ],
+  "resources": [
+    "PLAN.md",
+    "TASKS.md",
+    "COMPETITIVE-ANALYSIS.md"
+  ],
+  "output": "A PR adding the standalone 'verify someone else's claim' CLI with documentation and example walkthrough.",
+  "requestor": "TBD",
+  "verifiedNeed": false,
+  "outputLicense": "MIT"
+}
