@@ -1,0 +1,34 @@
+{
+  "id": "bigger-pi-release-018",
+  "title": "Open dataset + ReleaseManifest + reproducibility package + compute/energy disclosure (CC0)",
+  "project": "bigger-pi",
+  "type": "data",
+  "lane": "donated",
+  "priority": "medium",
+  "domain": [
+    "mathematics",
+    "distributed-computing",
+    "software",
+    "open-data"
+  ],
+  "riskTier": "low",
+  "urgent": false,
+  "deliverable": "dataset",
+  "tokenEstimate": "medium",
+  "status": "open",
+  "context": "bigger-pi is an open, distributed, verification-first effort to compute more digits of pi on donated compute; the public good is the open, reproducible, independently-verified toolchain, chunk-coordination protocol, and provenance ledger. The release publishes the verified digits as CC0 alongside a ReleaseManifest, a one-command reproduction package, and a compute/energy disclosure; an independent party must be able to re-derive the same finalResultHash, and no secrets or PII may appear anywhere. It depends on run-017.",
+  "objective": "Publish the verified digits (CC0) with a ReleaseManifest, a one-command reproducibility package, and a compute/energy disclosure that an independent party can reproduce.",
+  "acceptanceCriteria": [
+    "Publishes the digits (CC0), the ReleaseManifest (finalResultHash, two-method agreement, spot-check counts, repro command, compute CPU-hours + energy estimate), and a one-command reproduction package; an independent party re-derives the same finalResultHash.",
+    "No secrets/PII anywhere in the release; all artifacts content-addressed."
+  ],
+  "resources": [
+    "PLAN.md",
+    "TASKS.md",
+    "COMPETITIVE-ANALYSIS.md"
+  ],
+  "output": "A CC0 dataset release with ReleaseManifest, reproducibility package, and compute/energy disclosure.",
+  "requestor": "TBD",
+  "verifiedNeed": false,
+  "outputLicense": "CC0-1.0"
+}

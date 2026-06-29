@@ -1,0 +1,36 @@
+{
+  "id": "bigger-pi-ci-006",
+  "title": "CI: build/test/lint + determinism test + verification-gate test + dependency-license + no-secrets audit",
+  "project": "bigger-pi",
+  "type": "code",
+  "lane": "donated",
+  "priority": "high",
+  "domain": [
+    "mathematics",
+    "distributed-computing",
+    "software",
+    "open-data"
+  ],
+  "riskTier": "low",
+  "urgent": false,
+  "deliverable": "pr",
+  "tokenEstimate": "medium",
+  "status": "open",
+  "context": "bigger-pi is an open, distributed, verification-first effort to compute more digits of pi on donated compute; the public good is the open, reproducible, independently-verified toolchain, chunk-coordination protocol, and provenance ledger. CI is where the determinism contract and verification gate become enforced rather than aspirational, and where the no-secrets guardrail is mechanically checked. It depends on core-002.",
+  "objective": "Add CI that runs build/test/lint plus a determinism test, a verification-gate test, a dependency-license check, and a no-secrets audit.",
+  "acceptanceCriteria": [
+    "CI runs build, typecheck, lint, and unit tests and fails on any error.",
+    "CI includes a determinism test (same input -> same hash across two backends) and fails on mismatch.",
+    "CI includes a verification-gate test and fails if the HARD RULE gate does not hold.",
+    "CI fails on a license-incompatible dependency and on any secret detected in code, artifacts, or ledger fixtures."
+  ],
+  "resources": [
+    "PLAN.md",
+    "TASKS.md",
+    "COMPETITIVE-ANALYSIS.md"
+  ],
+  "output": "A PR adding CI workflows enforcing build/test/lint, determinism, verification-gate, dependency-license, and no-secrets checks.",
+  "requestor": "TBD",
+  "verifiedNeed": false,
+  "outputLicense": "MIT"
+}

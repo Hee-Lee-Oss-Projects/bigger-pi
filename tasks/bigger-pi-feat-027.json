@@ -1,0 +1,34 @@
+{
+  "id": "bigger-pi-feat-027",
+  "title": "Dependency / supply-chain audit + signed-release hardening",
+  "project": "bigger-pi",
+  "type": "maintenance",
+  "lane": "donated",
+  "priority": "low",
+  "domain": [
+    "mathematics",
+    "distributed-computing",
+    "software",
+    "open-data"
+  ],
+  "riskTier": "low",
+  "urgent": false,
+  "deliverable": "pr",
+  "tokenEstimate": "small",
+  "status": "open",
+  "context": "bigger-pi is an open, distributed, verification-first effort to compute more digits of pi on donated compute; the public good is the open, reproducible, independently-verified toolchain, chunk-coordination protocol, and provenance ledger. This recurring backlog task audits dependencies and their licenses and hardens release signing and supply-chain integrity (pinned lockfile, signed releases), keeping the project free of license-incompatible deps and of secrets.",
+  "objective": "Audit dependencies and licenses and harden release signing and supply-chain integrity.",
+  "acceptanceCriteria": [
+    "Audits dependencies and their licenses and removes/flags any incompatible dependency.",
+    "Hardens release signing and supply-chain integrity (pinned lockfile, signed releases); no secrets in code or artifacts; MIT-licensed."
+  ],
+  "resources": [
+    "PLAN.md",
+    "TASKS.md",
+    "COMPETITIVE-ANALYSIS.md"
+  ],
+  "output": "A PR with the dependency/supply-chain audit results and signed-release hardening.",
+  "requestor": "TBD",
+  "verifiedNeed": false,
+  "outputLicense": "MIT"
+}

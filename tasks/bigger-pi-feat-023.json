@@ -1,0 +1,34 @@
+{
+  "id": "bigger-pi-feat-023",
+  "title": "Schema extension: computeBudgetCpuHours for computation-run tasks",
+  "project": "bigger-pi",
+  "type": "code",
+  "lane": "donated",
+  "priority": "low",
+  "domain": [
+    "mathematics",
+    "distributed-computing",
+    "software",
+    "open-data"
+  ],
+  "riskTier": "low",
+  "urgent": false,
+  "deliverable": "pr",
+  "tokenEstimate": "small",
+  "status": "open",
+  "context": "bigger-pi is an open, distributed, verification-first effort to compute more digits of pi on donated compute; the public good is the open, reproducible, independently-verified toolchain, chunk-coordination protocol, and provenance ledger. The tokenEstimate enum does not capture CPU-hours and there is no compute-budget cap field, so this backlog task proposes an optional computeBudgetCpuHours field (analogous to fundedBudgetUsd) for computation-run tasks, gated on a governance decision and kept backward-compatible with the agent-neutral schema.",
+  "objective": "Propose and implement an optional, backward-compatible computeBudgetCpuHours schema field for computation-run tasks, gated on governance approval.",
+  "acceptanceCriteria": [
+    "Proposes and implements an optional computeBudgetCpuHours field (analogous to fundedBudgetUsd) for computation-run tasks, gated on a governance decision.",
+    "The change is additive and backward-compatible (existing tasks remain valid) with schema tests; MIT-licensed."
+  ],
+  "resources": [
+    "PLAN.md",
+    "TASKS.md",
+    "COMPETITIVE-ANALYSIS.md"
+  ],
+  "output": "A PR adding the optional, backward-compatible computeBudgetCpuHours schema field with tests.",
+  "requestor": "TBD",
+  "verifiedNeed": false,
+  "outputLicense": "MIT"
+}

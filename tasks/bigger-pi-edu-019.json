@@ -1,0 +1,33 @@
+{
+  "id": "bigger-pi-edu-019",
+  "title": "Educational explainers (binary splitting, BBP, NTT) + reusable distributed-verified-map-reduce pattern writeup",
+  "project": "bigger-pi",
+  "type": "writing",
+  "lane": "donated",
+  "priority": "low",
+  "domain": [
+    "mathematics",
+    "distributed-computing",
+    "education",
+    "software"
+  ],
+  "riskTier": "low",
+  "urgent": false,
+  "deliverable": "document",
+  "tokenEstimate": "medium",
+  "status": "open",
+  "context": "bigger-pi is an open, distributed, verification-first effort to compute more digits of pi on donated compute; the public good is the open, reproducible, independently-verified toolchain, chunk-coordination protocol, and provenance ledger. These explainers turn the project's methods into reusable public-good teaching material: binary splitting, BBP/Bellard extraction, NTT multiplication, plus a reusable 'distributed verified map-reduce' pattern writeup. It depends on release-018.",
+  "objective": "Write source-cited educational explainers of binary splitting, BBP/Bellard extraction, and NTT multiplication, plus a reusable distributed-verified-map-reduce pattern writeup.",
+  "acceptanceCriteria": [
+    "Clear, source-cited explainers of binary splitting, BBP/Bellard extraction, and NTT multiplication; plus a reusable 'distributed verified map-reduce' pattern writeup; CC-BY-4.0."
+  ],
+  "resources": [
+    "PLAN.md",
+    "TASKS.md",
+    "COMPETITIVE-ANALYSIS.md"
+  ],
+  "output": "A document set of educational explainers and the distributed-verified-map-reduce pattern writeup.",
+  "requestor": "TBD",
+  "verifiedNeed": false,
+  "outputLicense": "CC-BY-4.0"
+}

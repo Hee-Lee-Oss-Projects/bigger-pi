@@ -1,0 +1,35 @@
+{
+  "id": "bigger-pi-ledger-005",
+  "title": "Coordination protocol + append-only hash-chained digit ledger + reproducibility manifest schema",
+  "project": "bigger-pi",
+  "type": "design-spec",
+  "lane": "donated",
+  "priority": "high",
+  "domain": [
+    "mathematics",
+    "distributed-computing",
+    "software",
+    "open-data"
+  ],
+  "riskTier": "low",
+  "urgent": false,
+  "deliverable": "document",
+  "tokenEstimate": "medium",
+  "status": "open",
+  "context": "bigger-pi is an open, distributed, verification-first effort to compute more digits of pi on donated compute; the public good is the open, reproducible, independently-verified toolchain, chunk-coordination protocol, and provenance ledger. The ledger is the public provenance record from which any result is reproducible; it must be append-only, hash-chained, signed, and free of secrets. It depends on the arch-001 ADRs.",
+  "objective": "Specify the coordination protocol and the append-only hash-chained digit ledger plus the reproducibility-manifest schema (WorkUnit, ChunkResult, VerificationRecord, LedgerEntry, ReleaseManifest).",
+  "acceptanceCriteria": [
+    "Defines WorkUnit, ChunkResult, VerificationRecord, LedgerEntry, ReleaseManifest (per PLAN data model); ledger entries are append-only and hash-chained (each references the prior entry's hash) and signed.",
+    "A ReleaseManifest carries finalResultHash, twoMethodAgreement, spot-check counts, repro command, and compute/energy fields; no secrets appear anywhere in the schema.",
+    "Includes a documented one-command reproduction path from ledger to final hash."
+  ],
+  "resources": [
+    "PLAN.md",
+    "TASKS.md",
+    "COMPETITIVE-ANALYSIS.md"
+  ],
+  "output": "A document specifying the coordination protocol, append-only hash-chained ledger, and reproducibility-manifest schema.",
+  "requestor": "TBD",
+  "verifiedNeed": false,
+  "outputLicense": "CC-BY-4.0"
+}

@@ -1,0 +1,34 @@
+{
+  "id": "bigger-pi-perf-014",
+  "title": "NTT/FFT bignum multiplication backend (2nd independent backend); throughput up, determinism preserved",
+  "project": "bigger-pi",
+  "type": "code",
+  "lane": "donated",
+  "priority": "medium",
+  "domain": [
+    "mathematics",
+    "distributed-computing",
+    "software",
+    "open-data"
+  ],
+  "riskTier": "medium",
+  "urgent": false,
+  "deliverable": "pr",
+  "tokenEstimate": "large",
+  "status": "open",
+  "context": "bigger-pi is an open, distributed, verification-first effort to compute more digits of pi on donated compute; the public good is the open, reproducible, independently-verified toolchain, chunk-coordination protocol, and provenance ledger. A clean-room NTT/FFT multiplication backend lands as a second, genuinely independent bignum path; independence must be preserved because it is what the verification gate relies on, and the change must not break bit-reproducibility. It depends on core-002 and ci-006.",
+  "objective": "Implement a clean-room NTT/FFT bignum multiplication backend as a second independent path that improves throughput while preserving determinism and verification independence.",
+  "acceptanceCriteria": [
+    "A clean-room NTT/FFT multiplication backend lands as a second, genuinely independent bignum path (independence preserved for verification).",
+    "Documented >= Xx throughput improvement on a fixed benchmark; passes the determinism + verification tests - the PR does not merge if it breaks bit-reproducibility."
+  ],
+  "resources": [
+    "PLAN.md",
+    "TASKS.md",
+    "COMPETITIVE-ANALYSIS.md"
+  ],
+  "output": "A PR adding the clean-room NTT/FFT bignum backend as a second independent path with preserved determinism.",
+  "requestor": "TBD",
+  "verifiedNeed": false,
+  "outputLicense": "MIT"
+}

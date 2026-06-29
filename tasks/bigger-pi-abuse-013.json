@@ -1,0 +1,33 @@
+{
+  "id": "bigger-pi-abuse-013",
+  "title": "Anti-abuse threat model + guardrails (anti-botnet, consent, signed client, never-trust-one-worker, kill switch)",
+  "project": "bigger-pi",
+  "type": "design-spec",
+  "lane": "donated",
+  "priority": "medium",
+  "domain": [
+    "distributed-computing",
+    "security",
+    "software",
+    "open-data"
+  ],
+  "riskTier": "medium",
+  "urgent": false,
+  "deliverable": "document",
+  "tokenEstimate": "medium",
+  "status": "open",
+  "context": "bigger-pi is an open, distributed, verification-first effort to compute more digits of pi on donated compute; the public good is the open, reproducible, independently-verified toolchain, chunk-coordination protocol, and provenance ledger. A distributed donated-compute system must not become a botnet: this threat model documents the consent-first, never-trust-one-worker posture, DoS/poisoned-unit handling, and the kill switch, mapping each mitigation to an implemented control. It depends on worker-012.",
+  "objective": "Document the anti-abuse threat model and guardrails (anti-botnet, consent, signed client, never-trust-one-worker, kill switch) with each mitigation mapped to an implemented control.",
+  "acceptanceCriteria": [
+    "Documents the anti-botnet posture (consent-first, no covert/non-consenting use, no coordinator-executed code), the never-trust-one-worker rule, DoS/poisoned-unit handling, and the kill switch; each mitigation maps to an implemented control."
+  ],
+  "resources": [
+    "PLAN.md",
+    "TASKS.md",
+    "COMPETITIVE-ANALYSIS.md"
+  ],
+  "output": "A document recording the anti-abuse threat model and guardrails mapped to implemented controls.",
+  "requestor": "TBD",
+  "verifiedNeed": false,
+  "outputLicense": "CC-BY-4.0"
+}

@@ -1,0 +1,31 @@
+{
+  "id": "bigger-pi-feat-029",
+  "title": "Worker client: GIMPS-style checkpoint/restart and client-side self-checking arithmetic",
+  "project": "bigger-pi",
+  "type": "code",
+  "lane": "donated",
+  "priority": "medium",
+  "domain": ["distributed-computing", "software", "mathematics"],
+  "riskTier": "medium",
+  "urgent": false,
+  "deliverable": "pr",
+  "tokenEstimate": "medium",
+  "status": "open",
+  "context": "PLAN.md v0.2 adds two new M2 exit criteria to the worker client: (1) GIMPS-style checkpoint/restart — periodic state saves that allow interrupted laptop-class sessions to resume without losing work; and (2) client-side self-checking arithmetic — mod-p residue checks per chunk, analogous to GIMPS's Gerbicz check, that catch most bad results before they consume verification budget on the coordinator. These were not in the original worker-012 task scope (consent, resource caps, signing, result submission) and represent distinct reliability and efficiency improvements. Depends on worker-012.",
+  "objective": "Extend the donated-compute worker client with GIMPS-style checkpoint/restart (periodic state saves for resumable sessions) and client-side self-checking arithmetic (mod-p residue checks per chunk, analogous to the Gerbicz check) to catch bad results before coordinator verification.",
+  "acceptanceCriteria": [
+    "Worker client saves checkpoints at regular intervals (configurable frequency) so an interrupted session can resume from the last checkpoint without redoing prior work; checkpoint files contain no secrets or PII.",
+    "Worker client runs mod-p residue self-checks (analogous to GIMPS's Gerbicz check) at the end of each chunk computation and refuses to submit a result that fails the self-check, logging the failure without revealing secrets.",
+    "Checkpoint/restart and self-check behavior are covered by tests; the verification gate on the coordinator side is unchanged.",
+    "No secrets in logs or artifacts; MIT-licensed."
+  ],
+  "resources": [
+    "PLAN.md",
+    "TASKS.md",
+    "COMPETITIVE-ANALYSIS.md"
+  ],
+  "output": "A PR adding checkpoint/restart and client-side self-checking arithmetic to the donated-compute worker client.",
+  "requestor": "TBD",
+  "verifiedNeed": false,
+  "outputLicense": "MIT"
+}

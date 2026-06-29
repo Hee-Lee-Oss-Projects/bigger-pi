@@ -1,0 +1,36 @@
+{
+  "id": "bigger-pi-core-003",
+  "title": "BBP/Bellard hex-digit extractor (independent code path)",
+  "project": "bigger-pi",
+  "type": "code",
+  "lane": "donated",
+  "priority": "high",
+  "domain": [
+    "mathematics",
+    "distributed-computing",
+    "software",
+    "open-data"
+  ],
+  "riskTier": "low",
+  "urgent": false,
+  "deliverable": "pr",
+  "tokenEstimate": "medium",
+  "status": "open",
+  "context": "bigger-pi is an open, distributed, verification-first effort to compute more digits of pi on donated compute; the public good is the open, reproducible, independently-verified toolchain, chunk-coordination protocol, and provenance ledger. The BBP/Bellard hex extractor is a genuinely independent code path used as a verification cross-check against Method A; its independence is what makes the spot-checks meaningful. It depends on the arch-001 ADRs.",
+  "objective": "Implement a BBP/Bellard hex-digit extractor that computes hex digits of pi at an arbitrary offset via an algorithmically independent path from the Chudnovsky implementation.",
+  "acceptanceCriteria": [
+    "Implements BBP/Bellard hex-digit extraction at an arbitrary digit offset as a code path genuinely independent of the Method A (Chudnovsky) implementation.",
+    "Extracted hex digits match a known reference value for spot-checked offsets.",
+    "Deterministic: identical input produces identical output on repeat runs.",
+    "TypeScript/ESM, builds via pnpm; pnpm build && pnpm test && pnpm lint pass; MIT-licensed."
+  ],
+  "resources": [
+    "PLAN.md",
+    "TASKS.md",
+    "COMPETITIVE-ANALYSIS.md"
+  ],
+  "output": "A PR adding the BBP/Bellard hex-digit extractor as an independent verification code path.",
+  "requestor": "TBD",
+  "verifiedNeed": false,
+  "outputLicense": "MIT"
+}

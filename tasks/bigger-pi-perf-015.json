@@ -1,0 +1,35 @@
+{
+  "id": "bigger-pi-perf-015",
+  "title": "Bellard extractor optimization + optional GPU path (verification gate unchanged)",
+  "project": "bigger-pi",
+  "type": "code",
+  "lane": "donated",
+  "priority": "medium",
+  "domain": [
+    "mathematics",
+    "distributed-computing",
+    "software",
+    "open-data"
+  ],
+  "riskTier": "medium",
+  "urgent": false,
+  "deliverable": "pr",
+  "tokenEstimate": "medium",
+  "status": "open",
+  "context": "bigger-pi is an open, distributed, verification-first effort to compute more digits of pi on donated compute; the public good is the open, reproducible, independently-verified toolchain, chunk-coordination protocol, and provenance ledger. This optimizes the Bellard hex extractor and adds an optional, off-by-default GPU path; correctness must not depend on the GPU and the verification gate and determinism contract must remain unchanged. It depends on core-003.",
+  "objective": "Optimize the Bellard hex extractor and add an optional GPU path while leaving the verification gate and determinism contract unchanged.",
+  "acceptanceCriteria": [
+    "Optimizes the Bellard hex-extractor and adds an optional GPU path that is off by default and not required for correctness.",
+    "The verification gate is unchanged and still passes; determinism and bit-reproducibility are preserved.",
+    "Documents the throughput improvement on a fixed benchmark; the PR does not merge if it breaks the determinism or verification tests; MIT-licensed."
+  ],
+  "resources": [
+    "PLAN.md",
+    "TASKS.md",
+    "COMPETITIVE-ANALYSIS.md"
+  ],
+  "output": "A PR optimizing the Bellard extractor with an optional GPU path and an unchanged verification gate.",
+  "requestor": "TBD",
+  "verifiedNeed": false,
+  "outputLicense": "MIT"
+}

@@ -1,0 +1,34 @@
+{
+  "id": "bigger-pi-partner-020",
+  "title": "Secure research/education partner (university math/CS dept or distributed-computing project)",
+  "project": "bigger-pi",
+  "type": "research",
+  "lane": "donated",
+  "priority": "medium",
+  "domain": [
+    "mathematics",
+    "distributed-computing",
+    "education",
+    "open-data"
+  ],
+  "riskTier": "medium",
+  "urgent": false,
+  "deliverable": "document",
+  "tokenEstimate": "medium",
+  "status": "open",
+  "context": "bigger-pi is an open, distributed, verification-first effort to compute more digits of pi on donated compute; the public good is the open, reproducible, independently-verified toolchain, chunk-coordination protocol, and provenance ledger. Per the project's honest default, verifiedNeed stays false and requestor stays TBD until a named research/education or distributed-computing org confirms need/interest in writing; this task secures that partner. The absence of a partner does not strand the already-shipped public good.",
+  "objective": "Secure a named research/education or distributed-computing partner who confirms need/interest in writing.",
+  "acceptanceCriteria": [
+    "A named research/education or distributed-computing org confirms need/interest in writing.",
+    "On success, verifiedNeed flips to true and requestor is set to the named org across the project's tasks."
+  ],
+  "resources": [
+    "PLAN.md",
+    "TASKS.md",
+    "COMPETITIVE-ANALYSIS.md"
+  ],
+  "output": "A document recording the secured partner and their written confirmation of need/interest.",
+  "requestor": "TBD",
+  "verifiedNeed": false,
+  "outputLicense": "CC-BY-4.0"
+}

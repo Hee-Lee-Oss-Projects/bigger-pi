@@ -1,0 +1,36 @@
+{
+  "id": "bigger-pi-feat-026",
+  "title": "Funded-lane agent-assisted optimization spike (capped)",
+  "project": "bigger-pi",
+  "type": "code",
+  "lane": "funded",
+  "priority": "low",
+  "domain": [
+    "mathematics",
+    "distributed-computing",
+    "software",
+    "open-data"
+  ],
+  "riskTier": "low",
+  "urgent": false,
+  "deliverable": "pr",
+  "tokenEstimate": "small",
+  "status": "open",
+  "context": "bigger-pi is an open, distributed, verification-first effort to compute more digits of pi on donated compute; the public good is the open, reproducible, independently-verified toolchain, chunk-coordination protocol, and provenance ledger. This is the project's only funded-lane task: a capped, time-boxed spike evaluating agent-assisted optimization of a numeric inner loop. Per CLAUDE.md it runs only via packages/runner on an API key with a hard fundedBudgetUsd cap that must never be exceeded and a public cost ledger; the fundedBudgetUsd value here is a conservative placeholder pending governance approval, and no secrets may be written to logs, receipts, or artifacts.",
+  "objective": "Run a capped funded-lane spike (via packages/runner, under a hard fundedBudgetUsd cap) evaluating agent-assisted optimization of a numeric inner loop, leaving the verification gate unchanged.",
+  "acceptanceCriteria": [
+    "Runs only via packages/runner on an Anthropic API key with a hard fundedBudgetUsd cap that is never exceeded, and records a public cost ledger.",
+    "Evaluates agent-assisted optimization of a numeric inner loop as a capped, time-boxed spike; the verification gate and determinism contract remain unchanged.",
+    "No secrets written to logs/receipts/artifacts; the spike's budget cap is approved by governance before any spend; MIT-licensed."
+  ],
+  "resources": [
+    "PLAN.md",
+    "TASKS.md",
+    "COMPETITIVE-ANALYSIS.md"
+  ],
+  "output": "A PR with the capped funded-lane agent-assisted optimization spike and its public cost ledger.",
+  "requestor": "TBD",
+  "verifiedNeed": false,
+  "outputLicense": "MIT",
+  "fundedBudgetUsd": 50
+}

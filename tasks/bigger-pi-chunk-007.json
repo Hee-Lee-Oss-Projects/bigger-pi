@@ -1,0 +1,34 @@
+{
+  "id": "bigger-pi-chunk-007",
+  "title": "Work-unit manifest + credit-sized term-range chunker with per-chunk CPU/memory caps",
+  "project": "bigger-pi",
+  "type": "code",
+  "lane": "donated",
+  "priority": "high",
+  "domain": [
+    "mathematics",
+    "distributed-computing",
+    "software",
+    "open-data"
+  ],
+  "riskTier": "low",
+  "urgent": false,
+  "deliverable": "pr",
+  "tokenEstimate": "medium",
+  "status": "open",
+  "context": "bigger-pi is an open, distributed, verification-first effort to compute more digits of pi on donated compute; the public good is the open, reproducible, independently-verified toolchain, chunk-coordination protocol, and provenance ledger. The chunker turns a precision target into independent, credit-sized work units with hard per-chunk CPU/memory caps so each fits one donated session and runaway resource use is prevented. It depends on core-002 and ledger-005.",
+  "objective": "Implement the credit-sized term-range chunker and the work-unit manifest with hard per-chunk CPU-time and memory caps.",
+  "acceptanceCriteria": [
+    "Splits [0, N) into independent term-range work units, each with a hard CPU-time + memory cap sized to one donated session ('credit-sized'); a unit exceeding its cap aborts cleanly.",
+    "Emits a work-unit manifest (id, method, range, caps, algoVersion, backend) that the coordinator and ledger consume."
+  ],
+  "resources": [
+    "PLAN.md",
+    "TASKS.md",
+    "COMPETITIVE-ANALYSIS.md"
+  ],
+  "output": "A PR adding the term-range chunker and work-unit manifest with per-chunk CPU/memory caps.",
+  "requestor": "TBD",
+  "verifiedNeed": false,
+  "outputLicense": "MIT"
+}
