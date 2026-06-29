@@ -1,0 +1,34 @@
+{
+  "id": "bigger-pi-merge-008",
+  "title": "Hierarchical (P,Q,T) map-reduce merge; merged result bit-identical to single-host",
+  "project": "bigger-pi",
+  "type": "code",
+  "lane": "donated",
+  "priority": "high",
+  "domain": [
+    "mathematics",
+    "distributed-computing",
+    "software",
+    "open-data"
+  ],
+  "riskTier": "medium",
+  "urgent": false,
+  "deliverable": "pr",
+  "tokenEstimate": "large",
+  "status": "open",
+  "context": "bigger-pi is an open, distributed, verification-first effort to compute more digits of pi on donated compute; the public good is the open, reproducible, independently-verified toolchain, chunk-coordination protocol, and provenance ledger. The map-reduce merge combines accepted (P,Q,T) triples and must reproduce the single-host result bit-identically; this equivalence is the correctness contract of the whole distributed design. It depends on chunk-007.",
+  "objective": "Implement the hierarchical (P,Q,T) map-reduce merge whose merged result is bit-identical to a single-host computation of the same range.",
+  "acceptanceCriteria": [
+    "Hierarchically merges accepted (P, Q, T) triples using the associative combine; the merged root triple and assembled result are bit-identical to a single-host computation of the same range (asserted in CI).",
+    "Merge is order-independent for a fixed partition (associativity verified by test)."
+  ],
+  "resources": [
+    "PLAN.md",
+    "TASKS.md",
+    "COMPETITIVE-ANALYSIS.md"
+  ],
+  "output": "A PR adding the hierarchical (P,Q,T) map-reduce merge with bit-identical-to-single-host assertions.",
+  "requestor": "TBD",
+  "verifiedNeed": false,
+  "outputLicense": "MIT"
+}

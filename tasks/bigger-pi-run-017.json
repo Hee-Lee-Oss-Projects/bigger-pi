@@ -1,0 +1,35 @@
+{
+  "id": "bigger-pi-run-017",
+  "title": "Execute a verified extended-precision run (target sized to justified donated budget); full HARD-RULE verification",
+  "project": "bigger-pi",
+  "type": "data",
+  "lane": "donated",
+  "priority": "medium",
+  "domain": [
+    "mathematics",
+    "distributed-computing",
+    "software",
+    "verification"
+  ],
+  "riskTier": "medium",
+  "urgent": false,
+  "deliverable": "dataset",
+  "tokenEstimate": "large",
+  "status": "open",
+  "context": "bigger-pi is an open, distributed, verification-first effort to compute more digits of pi on donated compute; the public good is the open, reproducible, independently-verified toolchain, chunk-coordination protocol, and provenance ledger. The HARD RULE binds all computation-run and release work: no digit is accepted or published unless two independent computations are bit-identical, BBP/Bellard hex spot-checks pass, every chunk is recompute-verified and hashed, the published prefix matches a known reference, and the guard-digit analysis is recorded; an author may not verify their own run. This run's digit target and total compute/energy budget must be approved in advance against the energy-cost disclosure (no open-ended chase), it must pass the full HARD RULE signed by the verify-steward (not the runner), and zero unverified digits may be published. It depends on coord-011 and expert-016.",
+  "objective": "Execute a verified extended-precision pi run, sized to a justified donated budget, that passes the full HARD RULE with verify-steward sign-off.",
+  "acceptanceCriteria": [
+    "The run's digit target and total compute/energy budget were approved in advance against the energy-cost disclosure (no open-ended chase).",
+    "The result passes the full HARD RULE (two-method bit-identical agreement + BBP spot-checks + every chunk recompute-verified + reference prefix match + guard-digit analysis), signed by the verify-steward (not the runner).",
+    "Zero unverified digits are published."
+  ],
+  "resources": [
+    "PLAN.md",
+    "TASKS.md",
+    "COMPETITIVE-ANALYSIS.md"
+  ],
+  "output": "A dataset of the verified extended-precision pi run with its VerificationRecord and budget approval.",
+  "requestor": "TBD",
+  "verifiedNeed": false,
+  "outputLicense": "CC0-1.0"
+}

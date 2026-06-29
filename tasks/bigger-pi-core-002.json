@@ -1,0 +1,37 @@
+{
+  "id": "bigger-pi-core-002",
+  "title": "Chudnovsky binary-splitting reference impl: (P,Q,T) per term-range + single-host final assembly to >= 1e6 digits",
+  "project": "bigger-pi",
+  "type": "code",
+  "lane": "donated",
+  "priority": "high",
+  "domain": [
+    "mathematics",
+    "distributed-computing",
+    "software",
+    "open-data"
+  ],
+  "riskTier": "low",
+  "urgent": false,
+  "deliverable": "pr",
+  "tokenEstimate": "large",
+  "status": "open",
+  "context": "bigger-pi is an open, distributed, verification-first effort to compute more digits of pi on donated compute; the public good is the open, reproducible, independently-verified toolchain, chunk-coordination protocol, and provenance ledger. This is the Method A reference implementation - the single-host baseline that every later distributed/merged result must reproduce bit-identically, so its determinism and reference-match are foundational. It depends on the arch-001 ADRs (backend choice and guard-digit policy).",
+  "objective": "Implement the Chudnovsky binary-splitting algorithm computing exact integer (P,Q,T) per term-range plus single-host final assembly to >= 1e6 correct digits of pi.",
+  "acceptanceCriteria": [
+    "Computes exact integer (P, Q, T) for any term-range [a, b) using the associative recurrence; leaf terms follow the Chudnovsky definition; N ~= digits / 14.18 documented.",
+    "Single-host final assembly pi ~= (426880*sqrt(10005)*Q)/T produces >= 1e6 correct digits.",
+    "Result matches a published reference prefix to the computed precision (minus declared guard digits).",
+    "Deterministic: identical input produces identical artifact hash on repeat runs.",
+    "TypeScript/ESM, builds via pnpm; pnpm build && pnpm test && pnpm lint pass; MIT-licensed."
+  ],
+  "resources": [
+    "PLAN.md",
+    "TASKS.md",
+    "COMPETITIVE-ANALYSIS.md"
+  ],
+  "output": "A PR adding the Chudnovsky binary-splitting reference implementation (per-term-range (P,Q,T) plus single-host final assembly) computing pi to >= 1e6 verified digits.",
+  "requestor": "TBD",
+  "verifiedNeed": false,
+  "outputLicense": "MIT"
+}

@@ -1,0 +1,37 @@
+{
+  "id": "bigger-pi-verify-004",
+  "title": "Verification harness enforcing the HARD RULE: dual-backend bit-compare + BBP spot-check + known-reference check + guard-digit report",
+  "project": "bigger-pi",
+  "type": "code",
+  "lane": "donated",
+  "priority": "high",
+  "domain": [
+    "mathematics",
+    "distributed-computing",
+    "software",
+    "verification"
+  ],
+  "riskTier": "medium",
+  "urgent": false,
+  "deliverable": "pr",
+  "tokenEstimate": "large",
+  "status": "open",
+  "context": "bigger-pi is an open, distributed, verification-first effort to compute more digits of pi on donated compute; the public good is the open, reproducible, independently-verified toolchain, chunk-coordination protocol, and provenance ledger. The HARD RULE binds all computation-run and release work: no digit is accepted or published unless two independent computations are bit-identical, BBP/Bellard hex spot-checks pass, every chunk is recompute-verified and hashed, the published prefix matches a known reference, and the guard-digit analysis is recorded; an author may not verify their own run. This harness mechanizes that gate and is the spine of the project's verification-first posture; it depends on both core-002 and core-003.",
+  "objective": "Build the verification harness that enforces the HARD RULE: second-backend bit-identical re-derivation, BBP/Bellard hex spot-checks, known-reference cross-check, and a guard-digit report emitting a VerificationRecord.",
+  "acceptanceCriteria": [
+    "Re-derives a result with a second independent bignum backend and asserts bit-identical (excluding the declared G guard digits); fails loudly on any mismatch.",
+    "Runs >= 64 random BBP/Bellard hex spot-checks plus the hex tail against the assembled binary; all must pass; the residual-error probability bound is documented.",
+    "Cross-checks the published prefix against a known reference value.",
+    "Emits a VerificationRecord (hashes, backends, spot-check results, guard digits, verifier id); refuses to mark 'verified' unless every limb passes.",
+    "An author cannot sign off their own run (role-separation enforced in process and record fields)."
+  ],
+  "resources": [
+    "PLAN.md",
+    "TASKS.md",
+    "COMPETITIVE-ANALYSIS.md"
+  ],
+  "output": "A PR adding the verification harness that enforces the HARD RULE and emits a VerificationRecord.",
+  "requestor": "TBD",
+  "verifiedNeed": false,
+  "outputLicense": "MIT"
+}

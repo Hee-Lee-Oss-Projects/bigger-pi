@@ -297,3 +297,70 @@ Complete, schema-valid Task JSON for the first M0 task. `verifiedNeed` is `false
   "outputLicense": "CC-BY-4.0"
 }
 ```
+
+---
+
+## Generated task index
+
+Every milestone/backlog row above now has a schema-valid Elyos Task JSON under `tasks/` (validated
+against `packages/schema/src/schemas.ts`; `filename == id`; no duplicates; no extra keys). The seed
+`bigger-pi-arch-001.json` is kept as-is.
+
+**Fan-out:** none. This is a single-computation project with no plan-enumerated fan-out dimension
+(no language set, no named dataset/source list, no document/topic set). Each backlog row maps to
+exactly **one** representative task — no items were fabricated. Items that depend on unsecured
+inputs (the M4 digit target/budget, the partner org, the verification SME) remain a single task each
+and expand only on partner/scope/governance confirmation.
+
+**Field policy applied** (per "How these tasks map to Elyos"): `lane=donated` for all tasks except
+`bigger-pi-feat-026` (the explicit funded-lane spike — `lane=funded` with a hard
+`fundedBudgetUsd` cap; the value is a **conservative placeholder pending governance approval**);
+`verifiedNeed=false` and `requestor="TBD"` everywhere (no partner secured); `outputLicense` =
+`MIT` (code), `CC0-1.0` (digit data/datasets/ledgers), `CC-BY-4.0` (design-spec/research/writing
+docs); `riskTier` mirrors the Risk column (verification/computation-run/coordination/abuse =
+`medium`; infra/teaching = `low`). No task authors refused content; the HARD RULE and
+consent/anti-botnet/no-secrets guardrails are carried verbatim into the relevant `context` and
+`acceptanceCriteria`.
+
+**Acceptance criteria for rows without an explicit block above** (authored in the JSONs; summarized
+here so `TASKS.md` stays authoritative):
+
+- **bigger-pi-core-003 (BBP/Bellard hex extractor):** independent code path from Method A; extracted
+  hex digits match a known reference for spot-checked offsets; deterministic; TS/ESM, pnpm
+  build/test/lint pass; MIT.
+- **bigger-pi-bench-010 (final-assembly benchmark):** reproducible memory/wall-time benchmark of the
+  single-host final assembly across precision targets; quantifies the bottleneck + largest feasible
+  precision; documents mitigations without overstating; CC-BY-4.0.
+- **bigger-pi-perf-015 (Bellard optimization + optional GPU):** optional, off-by-default GPU path not
+  required for correctness; verification gate unchanged and passing; determinism preserved; documented
+  throughput gain; does not merge if it breaks determinism/verification; MIT.
+- **bigger-pi-feat-021 (frontier final-assembly):** out-of-core/large-memory consolidation strategy
+  addressing the single-host bottleneck; memory/time tradeoffs + reproducible plan; preserves
+  determinism/verification contracts; CC-BY-4.0.
+- **bigger-pi-feat-022 (normality/digit-statistics):** statistics derived only from already-verified
+  published digits; reproducible notebooks + CC0 dataset; no claims beyond the data; no PII; CC0-1.0.
+- **bigger-pi-feat-023 (computeBudgetCpuHours):** optional, backward-compatible schema field analogous
+  to `fundedBudgetUsd`, governance-gated; existing tasks remain valid; schema tests; MIT.
+- **bigger-pi-feat-024 (worker reputation/credit ledger):** pseudonymous credit/reputation
+  strengthening never-trust-one-worker; no PII; opt-in; no secrets; MIT.
+- **bigger-pi-feat-025 (cross-platform repro matrix):** OS/arch x backend matrix proving bit-identical
+  (P,Q,T); hardens + documents the determinism contract; records deviations; CC-BY-4.0.
+- **bigger-pi-feat-026 (funded-lane spike):** runs only via `packages/runner` under a hard
+  `fundedBudgetUsd` cap (never exceeded) with a public cost ledger; capped, time-boxed; verification
+  gate unchanged; no secrets in logs/receipts/artifacts; governance-approved before spend; MIT.
+- **bigger-pi-feat-027 (supply-chain audit + signed releases):** dependency/license audit removing or
+  flagging incompatible deps; signed-release hardening (pinned lockfile); no secrets; MIT.
+
+**Index (id -> milestone):**
+
+- M0: `bigger-pi-arch-001` (seed), `bigger-pi-core-002`, `bigger-pi-core-003`, `bigger-pi-verify-004`,
+  `bigger-pi-ledger-005`, `bigger-pi-ci-006`
+- M1: `bigger-pi-chunk-007`, `bigger-pi-merge-008`, `bigger-pi-verify-009`, `bigger-pi-bench-010`
+- M2: `bigger-pi-coord-011`, `bigger-pi-worker-012`, `bigger-pi-abuse-013`
+- M3: `bigger-pi-perf-014`, `bigger-pi-perf-015`, `bigger-pi-expert-016`
+- M4: `bigger-pi-run-017`, `bigger-pi-release-018`
+- M5: `bigger-pi-edu-019`, `bigger-pi-partner-020`
+- Backlog: `bigger-pi-feat-021`, `bigger-pi-feat-022`, `bigger-pi-feat-023`, `bigger-pi-feat-024`,
+  `bigger-pi-feat-025`, `bigger-pi-feat-026`, `bigger-pi-feat-027`
+
+Total: **27** task JSONs (1 pre-existing seed + 26 generated).

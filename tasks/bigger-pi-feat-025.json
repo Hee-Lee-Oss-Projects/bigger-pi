@@ -1,0 +1,34 @@
+{
+  "id": "bigger-pi-feat-025",
+  "title": "Cross-platform reproducibility matrix (OS/arch backends bit-identical)",
+  "project": "bigger-pi",
+  "type": "maintenance",
+  "lane": "donated",
+  "priority": "low",
+  "domain": [
+    "mathematics",
+    "distributed-computing",
+    "software",
+    "open-data"
+  ],
+  "riskTier": "low",
+  "urgent": false,
+  "deliverable": "document",
+  "tokenEstimate": "medium",
+  "status": "open",
+  "context": "bigger-pi is an open, distributed, verification-first effort to compute more digits of pi on donated compute; the public good is the open, reproducible, independently-verified toolchain, chunk-coordination protocol, and provenance ledger. This backlog task hardens the determinism contract by establishing a cross-platform reproducibility matrix (OS/arch x backend) demonstrating bit-identical (P,Q,T) results and recording any platform-specific deviations.",
+  "objective": "Establish a cross-platform reproducibility matrix demonstrating bit-identical (P,Q,T) results across OS/arch and backends.",
+  "acceptanceCriteria": [
+    "Establishes a cross-platform reproducibility matrix (OS/arch x backend) demonstrating bit-identical (P,Q,T) results.",
+    "Documents and hardens the determinism contract; records any platform-specific deviations; CC-BY-4.0."
+  ],
+  "resources": [
+    "PLAN.md",
+    "TASKS.md",
+    "COMPETITIVE-ANALYSIS.md"
+  ],
+  "output": "A document presenting the cross-platform reproducibility matrix and determinism-contract hardening.",
+  "requestor": "TBD",
+  "verifiedNeed": false,
+  "outputLicense": "CC-BY-4.0"
+}

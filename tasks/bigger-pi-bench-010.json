@@ -1,0 +1,35 @@
+{
+  "id": "bigger-pi-bench-010",
+  "title": "Benchmark + document the single-host final-assembly bottleneck (memory/time at scale)",
+  "project": "bigger-pi",
+  "type": "research",
+  "lane": "donated",
+  "priority": "medium",
+  "domain": [
+    "mathematics",
+    "distributed-computing",
+    "software",
+    "open-data"
+  ],
+  "riskTier": "low",
+  "urgent": false,
+  "deliverable": "document",
+  "tokenEstimate": "small",
+  "status": "open",
+  "context": "bigger-pi is an open, distributed, verification-first effort to compute more digits of pi on donated compute; the public good is the open, reproducible, independently-verified toolchain, chunk-coordination protocol, and provenance ledger. The single-host final assembly is the known scaling bottleneck (memory/time), and quantifying it honestly is what justifies later frontier-consolidation work. It depends on merge-008.",
+  "objective": "Benchmark and document the single-host final-assembly bottleneck (memory and time) across increasing precision targets.",
+  "acceptanceCriteria": [
+    "Benchmarks the single-host final-assembly step (memory and wall-time) across increasing precision targets with a documented, reproducible methodology.",
+    "Identifies and quantifies the single-host bottleneck and records the largest precision feasible on the reference host.",
+    "Documents candidate mitigations (e.g., out-of-core / large-memory consolidation) without overstating results; CC-BY-4.0."
+  ],
+  "resources": [
+    "PLAN.md",
+    "TASKS.md",
+    "COMPETITIVE-ANALYSIS.md"
+  ],
+  "output": "A document reporting the benchmarked single-host final-assembly bottleneck and candidate mitigations.",
+  "requestor": "TBD",
+  "verifiedNeed": false,
+  "outputLicense": "CC-BY-4.0"
+}
