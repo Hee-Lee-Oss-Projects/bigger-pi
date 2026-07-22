@@ -296,7 +296,7 @@ triple merge) → **single-host final assembly** → **verify** → **publish**.
   they consume verification budget. Pseudonymous, opt-in attribution; no PII.
 
 **Tech stack.** TypeScript/ESM + pnpm for the coordinator, CLI, ledger, manifests, and
-orchestration (consistent with Elyos conventions). The numeric inner loops use the chosen bignum
+orchestration (consistent with Hee-Lee Oss conventions). The numeric inner loops use the chosen bignum
 backends (e.g., GMP bindings) plus a clean-room NTT path; a native/WASM module is acceptable where
 TS performance is insufficient, provided it is open and deterministic. Hashing: SHA-256 (primary) +
 a second independent hash for artifacts. Testing: Vitest (unit), a determinism/repro test
@@ -472,7 +472,7 @@ Phased; each phase has measurable exit criteria. M0 is a thin, end-to-end cold-s
   Goal: a real (not simulated) coordinator + signed worker client so independent donors run chunks on
   their **own** machines with consent + caps; public hash-chained ledger; abuse guardrails. A
   **build-vs-reuse decision (custom coordinator vs. running as a BOINC project)** is made here — BOINC
-  already solves work distribution, redundant validation, and credit. The Elyos
+  already solves work distribution, redundant validation, and credit. The Hee-Lee Oss
   CPU-donation **schema gap** (`computeBudgetCpuHours`) is resolved **before** this milestone, not
   during it.
   Exit: ≥ 10 distinct external donors complete + verify chunks through the live coordinator; every
@@ -516,7 +516,7 @@ M5 depends on M4 (a verified run + dataset to teach from) and on the partner (pa
 ## Work breakdown
 
 The itemized, schema-mapped backlog lives in **TASKS.md**, organized by the M0–M5 milestones above.
-Each task maps to an Elyos Task JSON (see schema), is sized (small/medium/large), risk-tagged, and
+Each task maps to a Hee-Lee Oss Task JSON (see schema), is sized (small/medium/large), risk-tagged, and
 names a reviewer. TASKS.md also includes acceptance criteria for the most important tasks per
 milestone, milestone Definitions of Done, a backlog, and a complete, schema-valid example Task JSON.
 
@@ -535,7 +535,7 @@ milestone, milestone Definitions of Done, a backlog, and a complete, schema-vali
 - **Steward (last-mile owner): TBD** — owns dataset/release distribution and the partner relationship.
 - **Partner / requestor: TO BE SECURED** — a research/education or distributed-computing org
   confirming need and ultimately adopting/reusing the toolchain or dataset.
-- **Elyos governance/board:** arbitrates edge cases, risk-tier and compute-budget decisions per the
+- **Hee-Lee Oss governance/board:** arbitrates edge cases, risk-tier and compute-budget decisions per the
   good-deed definition.
 
 ## Dependencies & integrations
@@ -548,11 +548,11 @@ milestone, milestone Definitions of Done, a backlog, and a complete, schema-vali
 - **Tooling/libraries:** TypeScript/ESM, pnpm, Vitest; SHA-256 + a second hash; signing for the
   ledger and worker-client releases; optional native/WASM numeric module; optional GPU runtime (M3).
 - **Hosting:** a coordinator service (small footprint) + static publication of the ledger/dataset.
-- **Elyos pieces:** Task schema (`packages/schema`), CLI workspace prep / PR flow (donated lane),
+- **Hee-Lee Oss pieces:** Task schema (`packages/schema`), CLI workspace prep / PR flow (donated lane),
   good-deed definition & risk-tier governance, review/sign-off process.
 - **Human/expert dependency:** algorithm reviewers, the verification steward, and a numerical-analysis
   SME — the gating non-software dependencies for medium-risk sign-off.
-- **Compute dependency:** donated CPU/GPU cycles — a *distinct* resource from the Elyos agent lanes
+- **Compute dependency:** donated CPU/GPU cycles — a *distinct* resource from the Hee-Lee Oss agent lanes
   (see *Open questions* on the schema gap).
 
 ## Risks & mitigations
@@ -634,13 +634,13 @@ and are arguably worth more than π itself:
 - **Normality / statistics research substrate** — a clean, provenance-tagged CC0 digit corpus.
 - **Education track as a product** — an interactive "compute π and prove it" course built around the
   algorithm-work ↔ computation-run loop.
-- **Shared Elyos "independent-verification gate" primitive** — bigger-pi's HARD RULE (independent
-  recompute + cross-formula check, runner separated from verifier) is a reusable Elyos *platform*
+- **Shared Hee-Lee Oss "independent-verification gate" primitive** — bigger-pi's HARD RULE (independent
+  recompute + cross-formula check, runner separated from verifier) is a reusable Hee-Lee Oss *platform*
   capability other projects can consume, not a per-project reinvention.
 
 ## Open questions
 
-1. **Compute-donation lane gap (needs a human/governance decision).** Elyos lanes model **agent
+1. **Compute-donation lane gap (needs a human/governance decision).** Hee-Lee Oss lanes model **agent
    compute** (donated agent sessions / funded API with `fundedBudgetUsd`). bigger-pi's
    **computation-run family donates raw CPU/GPU cycles**, which the current Task schema doesn't model
    (`tokenEstimate` ∈ {small,medium,large} doesn't capture CPU-hours, and there's no compute-budget
@@ -675,10 +675,10 @@ contract** — reproducible reference path uses integer/fixed-modulus NTT, not f
 
 ## References
 
-- Elyos work rules — `C:\code\elyos\CLAUDE.md`
-- Good-deed definition & risk tiers — `C:\code\elyos\docs\good-deed-definition.md`
-- Task schema — `C:\code\elyos\packages\schema\src\schemas.ts`
-- Portfolio roadmap (bigger-pi entry) — `C:\code\elyos\planning\ROADMAP.md`
+- Hee-Lee Oss work rules — `C:\code\hee-lee-oss\CLAUDE.md`
+- Good-deed definition & risk tiers — `C:\code\hee-lee-oss\docs\good-deed-definition.md`
+- Task schema — `C:\code\hee-lee-oss\packages\schema\src\schemas.ts`
+- Portfolio roadmap (bigger-pi entry) — `C:\code\hee-lee-oss\planning\ROADMAP.md`
 - Algorithms (cite primary papers in provenance): Chudnovsky brothers (1988/1989), Chudnovsky series;
   Bailey, Borwein & Plouffe (1995/1997), the BBP formula; F. Bellard, Bellard's formula; binary
   splitting for hypergeometric series; Schönhage–Strassen / NTT-based multiplication.
@@ -724,10 +724,10 @@ The following 25 specific improvements were applied to the draft above (each not
     (Data, licensing & compliance).
 13. **Added a patent/encumbrance check** for the algorithms before reliance, with primary-paper
     citations in provenance (Data, Risks).
-14. **Flagged the Elyos schema gap** (agent-lane model vs. donated *CPU* compute) as a concrete
+14. **Flagged the Hee-Lee Oss schema gap** (agent-lane model vs. donated *CPU* compute) as a concrete
     governance decision with a proposed `computeBudgetCpuHours` extension (Open questions, Dependencies).
 15. **Separated the verification steward role from the runner** ("author may not verify their own
-    run") mirroring the no-self-approval pattern from sibling Elyos plans (Governance, Quality gates).
+    run") mirroring the no-self-approval pattern from sibling Hee-Lee Oss plans (Governance, Quality gates).
 16. **Required a numerical-analysis SME sign-off on the *methodology*** (spot-check sufficiency,
     independence, guard digits) as the medium-risk gate before any record-scale publish (Quality, M4).
 17. **Made success metrics integrity-first** (100% verified, 0 unverified published, 100%
@@ -772,7 +772,7 @@ DoD, backlog, and a schema-valid example Task JSON. Appendix A lists 25 applied 
   anti-botnet/consent posture explicit; medium-risk SME methodology sign-off required before any
   record-scale publish.
 - **Honesty:** partner and verified need marked **TO BE SECURED** / `verifiedNeed=false`; the
-  Elyos-lane-vs-CPU-donation **schema gap** surfaced as an explicit governance decision rather than
+  Hee-Lee Oss-lane-vs-CPU-donation **schema gap** surfaced as an explicit governance decision rather than
   glossed; record target gated behind a justified, disclosed budget.
 
 **Outstanding items requiring a human decision (carried to Open questions):** the compute-donation
@@ -810,6 +810,6 @@ Merges `COMPETITIVE-ANALYSIS.md` (2026-06-29) into the plan. One line per fix/ad
   tunable **redundancy factor**, **build-vs-reuse (BOINC)** decision, triple-streaming topology, GPU
   path, standalone **"verify someone else's claim" CLI**.
 - Added the **Adjacent opportunities** section (generalized donated-compute coordinator,
-  verification-as-a-service, other constants e/ζ(3)/Catalan, shared Elyos verification-gate primitive).
+  verification-as-a-service, other constants e/ζ(3)/Catalan, shared Hee-Lee Oss verification-gate primitive).
 - Merged Open questions (build-vs-reuse, partner wedge, energy-justification threshold; marked
   verification-cost-model and determinism as resolved); added landscape references.

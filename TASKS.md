@@ -2,9 +2,9 @@
 
 > Status: Draft · Version: 0.2.0 · Last updated: 2026-06-29 · Owner: TBD (maintainer) · Lane: donated
 
-## How these tasks map to Elyos
+## How these tasks map to Hee-Lee Oss
 
-Each task below becomes an Elyos **Task JSON** validated against
+Each task below becomes a Hee-Lee Oss **Task JSON** validated against
 `packages/schema/src/schemas.ts`. Field mapping:
 
 - `id` — stable slug ID, e.g. `bigger-pi-core-002`.
@@ -273,7 +273,7 @@ status; absence does not strand the already-shipped public good).
 | bigger-pi-feat-028 | Build-vs-reuse spike: bigger-pi as a BOINC project vs. custom coordinator | research | medium | low | document | Resolve before M2; BOINC already solves distribution/validation/credit |
 | bigger-pi-feat-029 | Standalone "verify someone else's claim" CLI (re-derives final hash from any dataset + manifest) | code | medium | low | pr | Seed of verification-as-a-service; reuses the harness |
 | bigger-pi-feat-030 | Generalized verified map-reduce for other constants (e, ζ(3), Catalan) + CC0 constant corpus | code | large | low | dataset | Constant-agnostic spin-off; oracle/benchmark for GMP/MPFR/Arb |
-| bigger-pi-feat-031 | Shared Elyos "independent-verification gate" primitive (runner-separated recompute + cross-formula check) | code | medium | low | pr | Reusable platform capability across Elyos projects |
+| bigger-pi-feat-031 | Shared Hee-Lee Oss "independent-verification gate" primitive (runner-separated recompute + cross-formula check) | code | medium | low | pr | Reusable platform capability across Hee-Lee Oss projects |
 
 ---
 
@@ -307,10 +307,10 @@ Complete, schema-valid Task JSON for the first M0 task. `verifiedNeed` is `false
     "ADRs are reviewed by maintainer, algo reviewer, and the verification steward before M0 implementation tasks proceed"
   ],
   "resources": [
-    "C:\\code\\elyos\\planning\\projects\\bigger-pi\\PLAN.md",
-    "C:\\code\\elyos\\planning\\ROADMAP.md",
-    "C:\\code\\elyos\\CLAUDE.md",
-    "C:\\code\\elyos\\docs\\good-deed-definition.md"
+    "C:\\code\\hee-lee-oss\\planning\\projects\\bigger-pi\\PLAN.md",
+    "C:\\code\\hee-lee-oss\\planning\\ROADMAP.md",
+    "C:\\code\\hee-lee-oss\\CLAUDE.md",
+    "C:\\code\\hee-lee-oss\\docs\\good-deed-definition.md"
   ],
   "output": "A document recording ADRs #1-#5 (dual bignum-backend strategy, (P,Q,T) artifact format, coordination+ledger schema, guard-digit policy, determinism contract) that gate the M0 implementation and verification tasks.",
   "requestor": "TBD",
@@ -323,7 +323,7 @@ Complete, schema-valid Task JSON for the first M0 task. `verifiedNeed` is `false
 
 ## Generated task index
 
-Every milestone/backlog row above now has a schema-valid Elyos Task JSON under `tasks/` (validated
+Every milestone/backlog row above now has a schema-valid Hee-Lee Oss Task JSON under `tasks/` (validated
 against `packages/schema/src/schemas.ts`; `filename == id`; no duplicates; no extra keys). The seed
 `bigger-pi-arch-001.json` is kept as-is.
 
@@ -333,7 +333,7 @@ exactly **one** representative task — no items were fabricated. Items that dep
 inputs (the M4 digit target/budget, the partner org, the verification SME) remain a single task each
 and expand only on partner/scope/governance confirmation.
 
-**Field policy applied** (per "How these tasks map to Elyos"): `lane=donated` for all tasks except
+**Field policy applied** (per "How these tasks map to Hee-Lee Oss"): `lane=donated` for all tasks except
 `bigger-pi-feat-026` (the explicit funded-lane spike — `lane=funded` with a hard
 `fundedBudgetUsd` cap; the value is a **conservative placeholder pending governance approval**);
 `verifiedNeed=false` and `requestor="TBD"` everywhere (no partner secured); `outputLicense` =

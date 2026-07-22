@@ -1,7 +1,7 @@
 # Competitive & Improvement Analysis — bigger-pi
 
 > Analyst review of `PLAN.md` (Draft v0.1.0, 2026-06-28). Web-researched, cited. Focus: technical
-> correctness, competitive landscape, and where Elyos + Claude can credibly win.
+> correctness, competitive landscape, and where Hee-Lee Oss + Claude can credibly win.
 > Analysis date: 2026-06-29.
 
 ---
@@ -20,7 +20,7 @@ The plan is unusually self-aware: it already concedes the single-host final-asse
 
 **1.5 Determinism / "bit-identical merged == single-host" is sound but platform-fragile.** Exact-integer `(P,Q,T)` are reproducible across platforms; the FFT/NTT multiply path is where non-determinism creeps in (floating-NTT rounding, SIMD reassociation). The plan's "two backends, one clean-room NTT" is good, but the determinism ADR must specify integer-only or fixed-modulus NTT for the reproducible reference path, or the bit-identical claim will quietly fail in CI across architectures.
 
-**1.6 Minor / completeness.** (a) `N ≈ digits/14.18` is correct (Chudnovsky yields ~14.18 digits/term). (b) Success-metrics table still lists a "verified precision milestone (≥1e8 baseline, larger M4 run)" — fine as an *educational* target but should not be labeled in record-adjacent language. (c) The Elyos schema gap (CPU-hour donation vs. `tokenEstimate`/`fundedBudgetUsd`) is correctly surfaced; this is a real governance blocker for M2 and should be resolved before, not during, the live-coordinator milestone. (d) No mention of **checkpoint/restart** for long chunks (GIMPS saves state every 30 min) — essential for donated sessions that get interrupted; add to the worker-client spec. (e) No **anti-Sybil / result-trust economics** detail beyond "2nd-worker recompute" — at scale, redundant verification is your dominant cost; specify the redundancy factor and how disputed units are adjudicated.
+**1.6 Minor / completeness.** (a) `N ≈ digits/14.18` is correct (Chudnovsky yields ~14.18 digits/term). (b) Success-metrics table still lists a "verified precision milestone (≥1e8 baseline, larger M4 run)" — fine as an *educational* target but should not be labeled in record-adjacent language. (c) The Hee-Lee Oss schema gap (CPU-hour donation vs. `tokenEstimate`/`fundedBudgetUsd`) is correctly surfaced; this is a real governance blocker for M2 and should be resolved before, not during, the live-coordinator milestone. (d) No mention of **checkpoint/restart** for long chunks (GIMPS saves state every 30 min) — essential for donated sessions that get interrupted; add to the worker-client spec. (e) No **anti-Sybil / result-trust economics** detail beyond "2nd-worker recompute" — at scale, redundant verification is your dominant cost; specify the redundancy factor and how disputed units are adjudicated.
 
 **Verdict:** Technically literate and refreshingly honest, but the framing must complete its pivot. The realistic, defensible goal is **education + independent verification + reproducible open pipeline + donated-compute coordination at moderate scale**, explicitly *not* a digit record. As written, the plan can ship something genuinely novel; as titled ("bigger-pi", "extend digits"), it invites the one comparison it cannot win.
 
@@ -105,7 +105,7 @@ The plan is unusually self-aware: it already concedes the single-host final-asse
 - **Other constants & a CC0 constant corpus** — verified digit datasets for several constants as a benchmark/test oracle for arbitrary-precision libraries (GMP, MPFR, Arb).
 - **Normality / statistics research substrate** — a clean, provenance-tagged CC0 digit corpus for normality studies.
 - **Education track as its own product** — an interactive "compute π and prove it" course; the alternating algorithm-work ↔ computation-run loop is a great teaching narrative.
-- **Tie to atltuae's loop/verification architecture** — bigger-pi's HARD RULE (independent recompute + cross-formula check, runner separated from verifier) is the same shape as atltuae's loop/verify pattern. Factor a **shared Elyos "independent-verification gate" primitive** both projects consume — verification-first becomes a reusable Elyos platform capability, not a per-project reinvention.
+- **Tie to atltuae's loop/verification architecture** — bigger-pi's HARD RULE (independent recompute + cross-formula check, runner separated from verifier) is the same shape as atltuae's loop/verify pattern. Factor a **shared Hee-Lee Oss "independent-verification gate" primitive** both projects consume — verification-first becomes a reusable Hee-Lee Oss platform capability, not a per-project reinvention.
 
 ---
 
@@ -116,6 +116,6 @@ The plan is unusually self-aware: it already concedes the single-host final-asse
 3. **Scale ceiling:** Will you publicly commit to a realistic distributed ceiling (~1e8–1e10 digits) and treat frontier assembly as out of scope, rather than leaving an implied record ambition?
 4. **Verification cost model:** Default to dual-full-computation (2x energy) or one-computation + BBP (record-industry standard)? This materially changes your energy disclosures and budget.
 5. **Determinism contract:** Integer/modular-NTT only for the reference path, to make "bit-identical" real across architectures?
-6. **Elyos schema gap:** Resolve `computeBudgetCpuHours` (CPU-hour donation) before M2, or block the live coordinator on it?
+6. **Hee-Lee Oss schema gap:** Resolve `computeBudgetCpuHours` (CPU-hour donation) before M2, or block the live coordinator on it?
 7. **Partner:** Is the most natural first partner a **university math/CS department** (education) or an **existing volunteer-compute org / BOINC** (distribution)? Pursuing both dilutes; pick the wedge.
 8. **Energy justification:** What public-good threshold justifies any compute spend at all, given that "more π digits" has near-zero intrinsic value and the honest product is the *pipeline*? Frame the budget against education/verification outcomes, not digit counts.

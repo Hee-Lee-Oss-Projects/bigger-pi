@@ -6,7 +6,7 @@
 
 **Definition of shipped:** (1) was produced by independent, credit-sized chunks merged map-reduce to a **bit-identical** single-host result; (2) passes the full **HARD RULE** (dual computation + BBP spot-check + per-chunk recompute + reference cross-check + guard-digit analysis); (3) is published as an **o
 
-This is an **Elyos** good-deed project. Contributors pull a task, do it with their own coding agent, and open a PR. Platform: https://github.com/jdev1977/elyos
+This is an **Hee-Lee Oss** good-deed project. Contributors pull a task, do it with their own coding agent, and open a PR. Platform: https://github.com/jdev1977/hee-lee-oss
 
 ## Plan
 - [PLAN.md](./PLAN.md) — robust enterprise plan (vision, architecture, roadmap, risks; includes an applied-improvements appendix + review sign-off)
@@ -15,8 +15,8 @@ This is an **Elyos** good-deed project. Contributors pull a task, do it with the
 
 ## Contribute
 ```bash
-elyos browse
-elyos next --repo Elyos-Projects/bigger-pi --no-fork
+hee-lee-oss browse
+hee-lee-oss next --repo Hee-Lee-Oss-Projects/bigger-pi --no-fork
 ```
 
 ## Licensing & review

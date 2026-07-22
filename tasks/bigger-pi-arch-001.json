@@ -22,10 +22,10 @@
     "ADRs are reviewed by maintainer, algo reviewer, and the verification steward before M0 implementation tasks proceed"
   ],
   "resources": [
-    "C:\\code\\elyos\\planning\\projects\\bigger-pi\\PLAN.md",
-    "C:\\code\\elyos\\planning\\ROADMAP.md",
-    "C:\\code\\elyos\\CLAUDE.md",
-    "C:\\code\\elyos\\docs\\good-deed-definition.md"
+    "C:\\code\\hee-lee-oss\\planning\\projects\\bigger-pi\\PLAN.md",
+    "C:\\code\\hee-lee-oss\\planning\\ROADMAP.md",
+    "C:\\code\\hee-lee-oss\\CLAUDE.md",
+    "C:\\code\\hee-lee-oss\\docs\\good-deed-definition.md"
   ],
   "output": "A document recording ADRs #1-#5 (dual bignum-backend strategy, (P,Q,T) artifact format, coordination+ledger schema, guard-digit policy, determinism contract) that gate the M0 implementation and verification tasks.",
   "requestor": "TBD",
